@@ -22,7 +22,7 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer, reloadPa
     }
 
     const DeleteData = async () => {
-        const response = await fetch('http://0.0.0.0:8080/api/companies/' + company.company_id, {
+        const response = await fetch('http://127.0.0.1:8080/api/companies/' + company.company_id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

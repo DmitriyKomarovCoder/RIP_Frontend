@@ -63,7 +63,7 @@ const CompaniesDetail: FC<CompanyDetailProps> = ({setPage}) => {
 
     async function fetchCompany() {
         try {
-            const response = await fetch(`http://0.0.0.0:8080/api/companies/${params.id}`);
+            const response = await fetch(`http://127.0.0.1:8080/api/companies/${params.id}`);
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');

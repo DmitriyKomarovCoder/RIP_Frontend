@@ -34,7 +34,7 @@ const CompaniesList: FC<CompanyListProps> = ({setPage, searchValue, resetSearchV
     }, [reloadPage]);
 
     const fetchCompanies = async () => {
-        const url = 'http://0.0.0.0:8080/api/companies' + `?company_name=${searchValue ?? ''}`;
+        const url = 'http://127.0.0.1:8080/api/companies' + `?company_name=${searchValue ?? ''}`;
 
         const response = await fetch(url, {
             method: "GET",

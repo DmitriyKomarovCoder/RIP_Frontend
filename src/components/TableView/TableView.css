@@ -25,20 +25,22 @@ th {
 }
 
 .delete-button-td {
-    width: 40px;
+    width: auto;
     padding: 0;
     margin: 0;
     border: none;
 }
-
-.delete-button-td img {
-    width: 100%;
-    height: auto;
-    filter: brightness(1.5); /* Adjust the brightness for the red color effect */
+.delete-td {
+    padding: 50px; /* убираем внутренний отступ для ячейки с кнопкой удаления */
 }
+/*.delete-button-td img {*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    filter: brightness(1.5); !* Adjust the brightness for the red color effect *!*/
+/*}*/
 
 .delete-button-td:hover {
-    box-shadow: 0 0 10px rgba(216, 52, 255, 0.99);
+    box-shadow: 0 0 10px rgba(141, 141, 141, 0.99);
 }
 
 .image-td img {

@@ -34,8 +34,7 @@ const NavigationBar: FC<NavigationBarProps> = ({handleSearchValue}) => {
             {error != "" && <MyComponent isError={true} message={error}/>}
             {success != "" && <MyComponent isError={false} message={success}/>}
 
-            <Navbar expand="sm" className="bg-black" data-bs-theme="dark">
-                <div className="container-xl px-2 px-sm-3">
+            <Navbar expand="sm" style={{ backgroundColor: "#000d31" }} data-bs-theme="dark">                <div className="container-xl px-2 px-sm-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">

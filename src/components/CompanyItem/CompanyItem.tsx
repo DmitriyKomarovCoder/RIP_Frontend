@@ -2,7 +2,9 @@ import {FC} from 'react';
 import {ICompany} from '../../models/models.ts';
 import './CardItem.css'
 import {addCompanyIntoTender} from "../../store/reducers/ActionCreator.ts";
-import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
+import {useAppDispatch} from "../../hooks/redux.ts";
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 //import {companySlice} from "../../store/reducers/CompanySlice.ts";
 
 
@@ -16,11 +18,11 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer}) => {
 
     const dispatch = useAppDispatch()
     //const {increase} = companySlice.actions
-    const {cash} = useAppSelector(state => state.companyReducer)
+    //const {cash} = useAppSelector(state => state.companyReducer)
 
     const plusClickHandler = () => {
         //dispatch(increase())
-        dispatch(addCompanyIntoTender(company.company_id, cash, company.name ?? "Без названия"))
+        dispatch(addCompanyIntoTender(company.company_id, 0.0, company.name ?? "Без названия"))
     }
 
     return (
@@ -33,13 +35,12 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer}) => {
                 id={`photo-${company.company_id}`}
             />
             {isServer && (
-                <div className="circle" onClick={plusClickHandler}>
-                    <img
-                        src="/RIP_Front/plus.png"
-                        alt="+"
-                        className="deleted-trash"
-                    />
-                </div>
+                <FontAwesomeIcon
+                    className="circle"
+                    icon={faPlus}
+                    onClick={() => plusClickHandler()}
+                    size="1x"
+                />
             )}
             <div className="container-card" onClick={() => onClick(company.company_id)}>{company.name}</div>
             {/*<div className="container-card" onClick={plusClickHandler}></div>*/}

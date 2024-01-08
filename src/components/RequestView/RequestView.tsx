@@ -73,7 +73,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                             <div className="info">
                                 <div className="author-info">
                                     <div>
-                                        <h4>Имя тендера: {emptyString(singleTender.tender_name, "Имя не задано")}</h4>
+                                        <h4>Название тендера: {emptyString(singleTender.tender_name, "Не задано")}</h4>
                                         <h4>Логин пользователя: {emptyString(singleTender.user.login, 'Логин на задан')}</h4>
                                     </div>
                                 </div>
@@ -105,11 +105,12 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                             <div className="detail-info">
                                 <input
                                     type="text"
-                                    className="form-control bg-black text-white"
+                                    className="form-control text-black"
                                     value={tenderName == "$" ? singleTender.tender_name : tenderName}
                                     onChange={(e) => setTenderName(e.target.value)}
                                     style={{marginBottom: '20px'}}
                                     disabled={singleTender.status == "удален"}
+                                    placeholder="Введите название тендера"
                                 />
                                 {/*<textarea*/}
                                 {/*    className="form-control description-text-info bg-black text-white"*/}

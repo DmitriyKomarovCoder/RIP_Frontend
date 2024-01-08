@@ -77,7 +77,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
                     {/*    onClick={handleDelete}*/}
                     {/*/>*/}
                     <div className="buttons">
-                        <button className="primary" onClick={BackHandler}>Назад</button>
+                        <button className="btn btn-primary" onClick={BackHandler}>Назад</button>
                         {/*<button className="primary ghost">Записаться</button>*/}
                     </div>
                 </div>

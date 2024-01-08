@@ -27,7 +27,7 @@
     justify-content: center;
     align-items: center;
     border: 2px solid rgba(255, 255, 255, 0.66);
-    background: linear-gradient(to right, rgba(74, 0, 152, 0.84) 0%, rgba(6, 76, 98, 0.8) 100%);
+    background: #3c97bf;
     border-radius: 15px 15px 20px 20px;
     text-align: center;
     color: #ffffff;
@@ -76,6 +76,7 @@
     opacity: 0;
     transition: opacity 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
+    color: #26BEEFCC;
 }
 
 .circle:hover {

@@ -1,8 +1,9 @@
-import {IDeleteCompanyTender, IRequest} from "../../models/models.ts";
+import {IDeleteCompanyTender, ITender, IRequest} from "../../models/models.ts";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface TenderState {
     tender: IRequest | null;
+    singleTender: ITender | null,
     isLoading: boolean;
     error: string;
     success: string;
@@ -10,6 +11,7 @@ interface TenderState {
 
 const initialState: TenderState = {
     tender: null,
+    singleTender: null,
     isLoading: false,
     error: '',
     success: ''
@@ -27,13 +29,17 @@ export const tenderSlice = createSlice({
             state.error = ''
             state.tender = action.payload
         },
+        tenderFetched(state, action: PayloadAction<ITender>) {
+            state.isLoading = false
+            state.error = ''
+            state.singleTender = action.payload
+        },
         tendersDeleteSuccess(state, action: PayloadAction<IDeleteCompanyTender>) {
             state.isLoading = false
             const text = action.payload.description ?? ""
             state.error = text
             state.success = "Компания успешно удалён из заявки"
         },
-
         tendersUpdated(state, action: PayloadAction<string[]>) {
             state.isLoading = false
             state.error = action.payload[0]

@@ -3,6 +3,9 @@ import {useParams, useNavigate} from 'react-router-dom';
 import './CompanyCard.css'
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
 import {fetchCompany} from "../../store/reducers/ActionCreator.ts";
+// import Cookies from "js-cookie";
+// import {faTrash} from "@fortawesome/free-solid-svg-icons";
+// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface CompanyDetailProps {
     setPage: (name: string, id: number) => void
@@ -13,6 +16,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
     const dispatch = useAppDispatch()
     const {company, isLoading, error} = useAppSelector(state => state.companyReducer)
     const navigate = useNavigate();
+    //const role = Cookies.get('role')
 
     // const handleDelete = () => {
     //     navigate('/companies');
@@ -28,7 +32,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
 
     // const DeleteData = async () => {
     //     try {
-    //         const response = await fetch('http://127.0.0.1:8080/api/companies/delete/' + company?.company_id, { // company_id
+    //         const response = await fetch('http://127.0.0.1:8080/api/companies/delete/' + company?.company_id, {
     //             method: 'DELETE',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -70,12 +74,14 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
                     <h6>ИИН: {company?.iin}</h6>
                     <h6>Статус: {company?.status}</h6>
                     <p>{company?.description}</p>
-                    {/*<img*/}
-                    {/*    className="delete-button"*/}
-                    {/*    src="/RIP_Front/deleteTrash.png"*/}
-                    {/*    alt="Delete"*/}
+                    {/*{role == '2' &&*/}
+                    {/*<FontAwesomeIcon*/}
+                    {/*    className="delete-button-td"*/}
+                    {/*    icon={faTrash}*/}
                     {/*    onClick={handleDelete}*/}
+                    {/*    size="1x"*/}
                     {/*/>*/}
+                    {/*}*/}
                     <div className="buttons">
                         <button className="btn btn-primary" onClick={BackHandler}>Назад</button>
                         {/*<button className="primary ghost">Записаться</button>*/}

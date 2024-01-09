@@ -1,29 +1,23 @@
-.breadcrumbs-container {
-    display: flex;
-    align-items: baseline;
-    font-size: 16px;
-    padding: 0 9%;
-    color: #0066cc;
-    transition: color 0.3s ease;
-}
+/* BreadCrumbs.css */
 
-.breadcrumbs-container:hover {
-    color: #003366;
-}
-
-.separator {
+.breadcrumbs {
     display: flex;
     align-items: center;
-    margin: 0 8px;
-    color: #3b3b3b;
 }
 
-.breadcrumb {
-    color: #0066cc;
-    cursor: pointer;
+.breadcrumb-item-2 {
+    margin-right: 5px; /* Расстояние между элементами, если нужно */
 }
 
-.breadcrumb:hover {
-    color: #003366;
-    cursor: pointer;
+.breadcrumb-item-2 a {
+    text-decoration: none;
+}
+
+.breadcrumb-item-2 a:hover {
+    color: #007bff; /* Новый цвет при наведении */
+}
+
+.breadcrumb-item-2:not(:last-child)::after {
+    content: '>'; /* Символ ">" после каждой ссылки, кроме последней */
+    margin-left: 5px; /* Расстояние между символом и следующей ссылкой */
 }

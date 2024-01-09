@@ -21,6 +21,10 @@ export interface ICompanyWithDraft { // ICityWithBasket
     companies: ICompany[],
 }
 
+export interface IDefaultResponse {
+    description?: string
+}
+
 export interface ICompanyTenders { // IDestinationHikes
     id: number,
     company_id: number,
@@ -38,6 +42,14 @@ export interface IAuthResponse {
     access_token?: string,
     description?: string,
     status?: string,
+    role?: string
+    userName: string,
+    userImage: string
+}
+
+export interface UserInfo {
+    name: string,
+    image: string,
 }
 
 export interface IUser {
@@ -57,6 +69,7 @@ export interface ITender { // IHike
     status: string,
     //creator_login: string,
     user: IUser,
+    moderator: IUser
     company_tenders: ICompanyTenders[],
 }
 

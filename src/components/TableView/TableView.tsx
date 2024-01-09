@@ -3,15 +3,16 @@ import './TableView.css'
 import {ICompanyTenders} from "../../models/models.ts";
 import {useAppDispatch} from "../../hooks/redux.ts";
 import {deleteTenderById, updateTenderCompany} from "../../store/reducers/ActionCreator.ts";
-//import {companySlice} from "../../store/reducers/CompanySlice.ts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 interface TableViewProps {
     status: string
     companyTender: ICompanyTenders[]
+    setPage: (name: string, id: number) => void
+    tenderID: string
 }
 
-const TableView: FC<TableViewProps> = ({companyTender, status}) => {
+const TableView: FC<TableViewProps> = ({companyTender, status, setPage, tenderID}) => {
     const dispatch = useAppDispatch()
     //const {minus} = companySlice.actions
     //const {increase} = companySlice.actions
@@ -21,19 +22,19 @@ const TableView: FC<TableViewProps> = ({companyTender, status}) => {
 
     const handleDelete = (id: number) => {
         //dispatch(minus())
-        dispatch(deleteTenderById(id))
+        dispatch(deleteTenderById(id, tenderID, setPage))
     }
 
     const handleCashChangePlus = (id: number, cash: number) => {
         cash += 1000
         //dispatch(increase())
-        dispatch(updateTenderCompany(id, cash))
+        dispatch(updateTenderCompany(id, cash, tenderID, setPage))
     }
 
     const handleCashChangeMinus = (id: number, cash: number) => {
         cash = cash == 0 ? 0 : cash - 1000
         //dispatch(minus())
-        dispatch(updateTenderCompany(id, cash))
+        dispatch(updateTenderCompany(id, cash, tenderID, setPage))
     }
 
     return (
@@ -45,7 +46,6 @@ const TableView: FC<TableViewProps> = ({companyTender, status}) => {
                     <th>Логотип компании</th>
                     <th>Название Компании</th>
                     <th>Описание</th>
-                    {status === "черновик" && <th>Действие</th>}
                 </tr>
                 </thead>
                 <tbody>

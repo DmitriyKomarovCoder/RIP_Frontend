@@ -8,6 +8,7 @@ interface CompanyState {
     error: string;
     success: string;
     cash: number;
+    draftID: number;
 }
 
 const initialState: CompanyState = {
@@ -16,7 +17,8 @@ const initialState: CompanyState = {
     isLoading: false,
     error: '',
     success: '',
-    cash: 0.0
+    cash: 0.0,
+    draftID: 0
 }
 
 export const companySlice = createSlice({
@@ -30,21 +32,25 @@ export const companySlice = createSlice({
             state.cash = state.cash == 0 ? 0 :  state.cash - 1000
         },
         reset(state) {
-            state.cash += 0
+            state.cash = 0
         },
         companiesFetching(state) {
             state.isLoading = true
             state.error = ''
             state.success = ''
         },
-        companiesFetched(state, action: PayloadAction<ICompany[]>) {
+        companiesFetched(state, action: PayloadAction<[ICompany[], number]>) {
             state.isLoading = false
-            state.companies = action.payload
+            state.companies = action.payload[0]
+            state.draftID = action.payload[1]
         },
         companiesFetchedError(state, action: PayloadAction<string>) {
             state.isLoading = false
             state.error = action.payload
             state.success = ''
+        },
+        setDraft(state, action: PayloadAction<number>) {
+            state.draftID = action.payload
         },
         companyAddedIntoTender(state, action: PayloadAction<string[]>) {
             state.isLoading = false

@@ -7,7 +7,8 @@ import {
     IDeleteCompanyTender,
     ITenderResponse, IRegisterResponse,
     IRequest,
-    mockCompanies
+    ITender,
+    mockCompanies, IDefaultResponse
 } from "../../models/models.ts";
 import Cookies from 'js-cookie';
 import {companySlice} from "./CompanySlice.ts"
@@ -15,18 +16,134 @@ import {tenderSlice} from "./TenderSlice.ts";
 import {userSlice} from "./UserSlice.ts";
 
 
-export const fetchCompanies = (searchValue?: string) => async (dispatch: AppDispatch) => {
+export const fetchCompanies = (searchValue?: string, makeLoading: boolean = true) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken')
     dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    const config = {
+        method: "get",
+        url: '/api/companies' + `?company_name=${searchValue ?? ''}`,
+        headers: {
+            Authorization: `Bearer ${accessToken ?? ''}`,
+        },
+    }
+
     try {
-        dispatch(companySlice.actions.companiesFetching())
-        const response = await axios.get<ICompanyWithDraft>('/api/companies' + `?company_name=${searchValue ?? ''}`)
-        dispatch(companySlice.actions.companiesFetched(response.data.companies))
+        if (makeLoading) {
+            dispatch(companySlice.actions.companiesFetching())
+        }
+        const response = await axios<ICompanyWithDraft>(config);
+        dispatch(companySlice.actions.companiesFetched([response.data.companies, response.data.draft_id]))
     } catch (e) {
-        dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
-        dispatch(companySlice.actions.companiesFetched(filterMockData(searchValue)))
+        // dispatch(citySlice.actions.citiesFetchedError(`Пожалуйста, авторизуйтесь (`))
+        dispatch(companySlice.actions.companiesFetched([filterMockData(searchValue), 0]))
     }
 }
+
+
+// export const fetchCompanies = (searchValue?: string) => async (dispatch: AppDispatch) => {
+//     const accessToken = Cookies.get('jwtToken')
+//     dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+//     try {
+//         dispatch(companySlice.actions.companiesFetching())
+//         const response = await axios.get<ICompanyWithDraft>('/api/companies' + `?company_name=${searchValue ?? ''}`)
+//         dispatch(companySlice.actions.companiesFetched([response.data.companies, response.data.draft_id]))
+//     } catch (e) {
+//         dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
+//         dispatch(companySlice.actions.companiesFetched([filterMockData(searchValue), 0]))
+//     }
+// }
+//
+export const updateCompanyInfo = (
+    id: number,
+    companyName: string,
+    description: string,
+    status: string,
+    IIN: string
+) => async (dispatch: AppDispatch) => {
+    const accessToken = Cookies.get('jwtToken')
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    const config = {
+        method: "put",
+        url: `/api/companies`,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+            id: id,
+            name: companyName,
+            description: description,
+            status: status,
+            iin: IIN,
+        },
+    }
+
+    try {
+        dispatch(companySlice.actions.companiesFetching())
+        const response = await axios<IDefaultResponse>(config);
+        const error = response.data.description ?? ""
+        const success = error == "" ? 'Данные обновленны' : ''
+        dispatch(companySlice.actions.companyAddedIntoTender([error, success]))
+        dispatch(fetchCompanies())
+    } catch (e) {
+        dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
+    }
+}
+
+export const updateCompanyImage = (cityId: number, file: File) => async (dispatch: AppDispatch) => {
+    const accessToken = Cookies.get('jwtToken')
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('company_id', `${cityId}`);
+
+    const config = {
+        method: "put",
+        url: `/api/companies/upload-image`,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        data: formData,
+    }
+
+    try {
+        dispatch(companySlice.actions.companiesFetching())
+        const response = await axios<IDefaultResponse>(config);
+        const error = response.data.description ?? ""
+        const success = error == "" ? 'Фото обновленно' : ''
+        dispatch(companySlice.actions.companyAddedIntoTender([error, success]))
+        dispatch(fetchCompanies())
+    } catch (e) {
+        dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
+    }
+}
+
+export const deleteCompany = (companyId: number) => async (dispatch: AppDispatch) => {
+    const accessToken = Cookies.get('jwtToken')
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+
+    const config = {
+        method: "delete",
+        url: `/api/companies`,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+            id: `${companyId}`
+        },
+    }
+
+    try {
+        dispatch(companySlice.actions.companiesFetching())
+        const response = await axios<IDefaultResponse>(config);
+        const error = response.data.description ?? ""
+        const success = error == "" ? 'Компания удалена' : ''
+        dispatch(companySlice.actions.companyAddedIntoTender([error, success]))
+        dispatch(fetchCompanies())
+    } catch (e) {
+        dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
+    }
+}
+
 
 export const addCompanyIntoTender = (companyId: number, cash: number, companyName: string) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken');
@@ -43,13 +160,15 @@ export const addCompanyIntoTender = (companyId: number, cash: number, companyNam
     }
 
     try {
-        dispatch(companySlice.actions.companiesFetching())
+        //dispatch(companySlice.actions.companiesFetching())
         const response = await axios(config);
         const errorText = response.data.description ?? ""
-        const successText = errorText || `Компания "${companyName}" добавлен`
+        const successText = errorText || `Компания "${companyName}" добавлена`
         dispatch(companySlice.actions.companyAddedIntoTender([errorText, successText]));
+        dispatch(companySlice.actions.setDraft(response.data.id))
         setTimeout(() => {
             dispatch(companySlice.actions.companyAddedIntoTender(['', '']));
+            // dispatch(companySlice.actions.setDraft(response.data.id))
         }, 6000);
     } catch (e) {
         dispatch(companySlice.actions.companiesFetchedError(`${e}`))
@@ -74,6 +193,7 @@ export const deleteTender = (id: number) => async (dispatch: AppDispatch) => {
         const response = await axios(config);
         const errorText = response.data.description ?? ""
         const successText = errorText || `Заявка удалена`
+        dispatch(companySlice.actions.setDraft(0))
         dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
         if (successText != "") {
             dispatch(fetchTenders())
@@ -102,6 +222,38 @@ export const makeTender = () => async (dispatch: AppDispatch) => {
         const response = await axios(config);
         const errorText = response.data.description ?? ""
         const successText = errorText || `Заявка создана`
+        dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
+        dispatch(companySlice.actions.setDraft(0))
+        if (successText != "") {
+            dispatch(fetchTenders())
+        }
+        setTimeout(() => {
+            dispatch(tenderSlice.actions.tendersUpdated(['', '']));
+        }, 6000);
+    } catch (e) {
+        dispatch(tenderSlice.actions.tendersDeleteError(`${e}`))
+    }
+}
+
+export const moderatorUpdateStatus = (tenderId: number, status: string) => async (dispatch: AppDispatch) => {
+    const accessToken = Cookies.get('jwtToken');
+
+    const config = {
+        method: "put",
+        url: "/api/tenders/updateStatus",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+            status: status,
+            tender_id: tenderId
+        }
+    }
+    try {
+        dispatch(tenderSlice.actions.tendersFetching())
+        const response = await axios(config);
+        const errorText = response.data.description ?? ""
+        const successText = errorText || `Ответ принят`
         dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
         if (successText != "") {
             dispatch(fetchTenders())
@@ -136,7 +288,91 @@ export const fetchTenders = () => async (dispatch: AppDispatch) => {
     }
 }
 
-export const deleteTenderById = (id: number) => async (dispatch: AppDispatch) => {
+export const fetchCurrentTender = () => async (dispatch: AppDispatch) => {
+    interface ISingleTenderResponse {
+        tenders: number,
+    }
+
+    const accessToken = Cookies.get('jwtToken');
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    try {
+        const response = await axios.get<ISingleTenderResponse>(`/api/tenders/current`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        dispatch(companySlice.actions.setDraft(response.data.tenders))
+
+    } catch (e) {
+        dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
+    }
+}
+
+export const fetchTenderById = (
+    id: string,
+    setPage: (name: string, id: number) => void
+) => async (dispatch: AppDispatch) => {
+    interface ISingleTenderResponse {
+        tender: ITender,
+    }
+
+    const accessToken = Cookies.get('jwtToken');
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    try {
+        dispatch(tenderSlice.actions.tendersFetching())
+        const response = await axios.get<ISingleTenderResponse>(`/api/tenders/${id}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        setPage(response.data.tender.tender_name, response.data.tender.id)
+        dispatch(tenderSlice.actions.tenderFetched(response.data.tender))
+    } catch (e) {
+        dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
+    }
+}
+
+export const fetchTendersFilter = (dateStart?: string, dateEnd?: string, status?: string) => async (dispatch: AppDispatch) => {
+    const accessToken = Cookies.get('jwtToken');
+    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+    try {
+        dispatch(tenderSlice.actions.tendersFetching())
+        const queryParams: Record<string, string | undefined> = {};
+        if (dateStart) {
+            queryParams.start_date = dateStart;
+        }
+        if (dateEnd) {
+            queryParams.end_date = dateEnd;
+        }
+        if (status) {
+            queryParams.status_id = status;
+        }
+        const queryString = Object.keys(queryParams)
+            .map((key) => `${key}=${encodeURIComponent(queryParams[key]!)}`)
+            .join('&');
+        const urlWithParams = `/api/tenders${queryString ? `?${queryString}` : ''}`;
+        const response = await axios.get<ITenderResponse>(urlWithParams, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+
+        const transformedResponse: IRequest = {
+            tenders: response.data.tenders,
+            status: response.data.status
+        };
+        // console.log(transformedResponse.hikes)
+        dispatch(tenderSlice.actions.tendersFetched(transformedResponse))
+    } catch (e) {
+        dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
+    }
+}
+
+export const deleteTenderById = (
+    id: number,
+    tender_id: string,
+    setPage: (name: string, id: number) => void
+) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken');
 
     try {
@@ -150,13 +386,18 @@ export const deleteTenderById = (id: number) => async (dispatch: AppDispatch) =>
             },
         });
         dispatch(tenderSlice.actions.tendersDeleteSuccess(response.data))
-        dispatch(fetchTenders())
+        dispatch(fetchTenderById(tender_id, setPage))
     } catch (e) {
         dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
     }
 }
 
-export const updateTenderCompany = (index: number, newCash: number) => async (dispatch: AppDispatch) => {
+export const updateTenderCompany = (
+    index: number,
+    newCash: number,
+    tender_id: string,
+    setPage: (name: string, id: number) => void
+) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken');
     const config = {
         method: "put",
@@ -176,11 +417,17 @@ export const updateTenderCompany = (index: number, newCash: number) => async (di
 
     try {
         const response = await axios(config);
+        //const errorText = response.data.description ?? ""
+        //const successText = errorText || "Успешно обновленно"
+        //dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
+        //dispatch(tenderSlice.actions.tendersDeleteSuccess(response.data))
         const errorText = response.data.description ?? ""
         const successText = errorText || "Успешно обновленно"
         dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
-        //dispatch(tenderSlice.actions.tendersDeleteSuccess(response.data))
-        dispatch(fetchTenders())
+        setTimeout(() => {
+            dispatch(tenderSlice.actions.tendersUpdated(['', '']));
+        }, 5000);
+        dispatch(fetchTenderById(tender_id, setPage))
     } catch (e) {
         dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
     }
@@ -236,13 +483,60 @@ export const fetchCompany = (
         setPage(company.name ?? "Без названия", company.company_id)
         dispatch(companySlice.actions.companyFetched(company))
     } catch (e) {
-        console.log(`Ошибка загрузки городов: ${e}`)
+        console.log(`Ошибка загрузки компаний: ${e}`)
         const previewID = companyId !== undefined ? parseInt(companyId, 10) - 1 : 0;
         const mockCompany = mockCompanies[previewID]
         setPage(mockCompany.name ?? "Без названия", mockCompany.company_id)
         dispatch(companySlice.actions.companyFetched(mockCompany))
     }
 }
+
+export const createCompany = (
+    companyName?: string,
+    description?: string,
+    iin?: string,
+    image?: File | null
+) => async (dispatch: AppDispatch) => {
+    const formData = new FormData();
+    if (companyName) {
+        formData.append('company_name', companyName);
+    }
+    if (description) {
+        formData.append('description', description);
+    }
+    if (image) {
+        formData.append('image_url', image);
+    }
+    if (iin) {
+        formData.append('iin', iin)
+    }
+    formData.append('status', 'действует');
+    const accessToken = Cookies.get('jwtToken');
+
+    const config = {
+        method: "post",
+        url: "/api/companies",
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data'
+        },
+        data: formData
+    };
+
+    try {
+        dispatch(companySlice.actions.companiesFetching())
+        const response = await axios(config);
+        const errorText = response.data.description || ''
+        const successText = errorText == '' ? "Компания создан" : ''
+        dispatch(companySlice.actions.companyAddedIntoTender([errorText, successText]))
+        setTimeout(() => {
+            dispatch(companySlice.actions.companyAddedIntoTender(['', '']));
+        }, 6000)
+    } catch (e) {
+        dispatch(companySlice.actions.companiesFetchedError(`${e}`));
+    }
+}
+
 
 export const registerSession = (userName: string, login: string, password: string) => async (dispatch: AppDispatch) => {
     const config = {
@@ -287,7 +581,7 @@ export const logoutSession = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(userSlice.actions.startProcess())
         const response = await axios(config);
-        const errorText = response.data.login == '' ? 'Ошибка регистрации' : ''
+        const errorText = response.data.login == '' ? 'Ошибка при попытке выйти' : ''
         const successText = errorText || "Попробуйте ещё раз"
         dispatch(userSlice.actions.setStatuses([errorText, successText]))
 
@@ -302,7 +596,6 @@ export const logoutSession = () => async (dispatch: AppDispatch) => {
         dispatch(userSlice.actions.setError(`${e}`));
     }
 }
-
 
 export const loginSession = (login: string, password: string) => async (dispatch: AppDispatch) => {
     const config = {
@@ -321,12 +614,16 @@ export const loginSession = (login: string, password: string) => async (dispatch
         dispatch(userSlice.actions.startProcess())
         const response = await axios<IAuthResponse>(config);
         const errorText = response.data.description ?? ""
-        const successText = errorText || "Авторизация прошла успешна"
+        const successText = errorText || "Добро пожаловать :)"
         dispatch(userSlice.actions.setStatuses([errorText, successText]));
         const jwtToken = response.data.access_token
+        dispatch(userSlice.actions.setRole(response.data.role ?? ''))
         if (jwtToken) {
             Cookies.set('jwtToken', jwtToken);
+            Cookies.set('role', response.data.role ?? '');
             dispatch(userSlice.actions.setAuthStatus(true));
+            Cookies.set('userImage', response.data.userImage)
+            Cookies.set('userName', response.data.userName)
         }
         setTimeout(() => {
             dispatch(userSlice.actions.resetStatuses());
@@ -340,17 +637,17 @@ export const loginSession = (login: string, password: string) => async (dispatch
 
 function filterMockData(searchValue?: string) {
     if (searchValue) {
-        const filteredCompanies = mockCompanies.filter(company =>
+        const filteredCities = mockCompanies.filter(company =>
             company.name?.toLowerCase().includes((searchValue ?? '').toLowerCase())
         );
-        if (filteredCompanies.length === 0) {
+        if (filteredCities.length === 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             document.getElementById('search-text-field').value = ""
             alert("Данных нету")
 
         }
-        return filteredCompanies
+        return filteredCities
     }
     return mockCompanies
 }

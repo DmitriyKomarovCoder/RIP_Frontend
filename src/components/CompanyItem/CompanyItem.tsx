@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {ICompany} from '../../models/models.ts';
 import './CardItem.css'
 import {addCompanyIntoTender} from "../../store/reducers/ActionCreator.ts";
-import {useAppDispatch} from "../../hooks/redux.ts";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 //import {companySlice} from "../../store/reducers/CompanySlice.ts";
@@ -19,7 +19,7 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer}) => {
     const dispatch = useAppDispatch()
     //const {increase} = companySlice.actions
     //const {cash} = useAppSelector(state => state.companyReducer)
-
+    const {isAuth} = useAppSelector(state => state.userReducer)
     const plusClickHandler = () => {
         //dispatch(increase())
         dispatch(addCompanyIntoTender(company.company_id, 0.0, company.name ?? "Без названия"))
@@ -34,7 +34,7 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer}) => {
                 onClick={() => onClick(company.company_id)}
                 id={`photo-${company.company_id}`}
             />
-            {isServer && (
+            {isServer && isAuth && (
                 <FontAwesomeIcon
                     className="circle"
                     icon={faPlus}

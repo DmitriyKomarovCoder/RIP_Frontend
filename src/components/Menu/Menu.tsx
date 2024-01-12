@@ -2,16 +2,16 @@ import {Container} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import './Menu.css'
 import {FC, useEffect} from "react";
-import {useAppDispatch} from "../../hooks/redux.ts";
+//import {useAppDispatch} from "../../hooks/redux.ts";
 import Cookies from "js-cookie";
-import {fetchCurrentTender} from "../../store/reducers/ActionCreator.ts";
+//import {fetchCurrentTender} from "../../store/reducers/ActionCreator.ts";
 
 interface MenuProps {
     setPage: () => void
 }
 
 const Menu: FC<MenuProps> = ({setPage}) => {
-    const dispatch = useAppDispatch()
+    //const dispatch = useAppDispatch()
     // const {draftID} = useAppSelector(state => state.companyReducer)
     // const navigate = useNavigate()
     const jwtToken = Cookies.get('jwtToken')
@@ -19,7 +19,7 @@ const Menu: FC<MenuProps> = ({setPage}) => {
 
     useEffect(() => {
         setPage()
-        dispatch(fetchCurrentTender())
+        //dispatch(fetchCurrentTender())
     }, []);
 
     if (!jwtToken) {

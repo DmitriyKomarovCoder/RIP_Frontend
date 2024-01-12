@@ -108,7 +108,7 @@ body {
     margin-bottom: 10px;
 }
 
-.table-hikes {
+.table-tenders {
     width: calc(100% - 160px);
     margin-left: 80px;
     margin-right: 80px;
@@ -118,4 +118,5 @@ body {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    margin-bottom: 20px;
 }

@@ -211,7 +211,8 @@ export const makeTender = () => async (dispatch: AppDispatch) => {
 
     const config = {
         method: "put",
-        url: "/api/tenders/form",
+        //url: "/api/tenders/form",
+        url: "/api/tenders/user-form-start",
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
@@ -546,7 +547,7 @@ export const registerSession = (userName: string, login: string, password: strin
             'Content-Type': 'application/json'
         },
         data: {
-            'name': userName,
+            user_name: userName,
             login: login,
             password: password,
         }

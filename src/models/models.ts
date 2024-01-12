@@ -59,17 +59,22 @@ export interface IUser {
     password: string,
 }
 
-export interface ITender { // IHike
+export interface ITender {
     id: number,
     tender_name: string,
     creation_date: string,
     completion_date: string,
     formation_date: string,
-    user_id: number,
+    //user_id: number,
     status: string,
+    status_check: string,
+    user_name: string,
+    moderator_name: string,
+    user_login: string,
+    moderator_login: string,
     //creator_login: string,
-    user: IUser,
-    moderator: IUser
+    //user: IUser,
+    //moderator: IUser
     company_tenders: ICompanyTenders[],
 }
 

@@ -24,9 +24,10 @@ const NavigationBar = () => {
     // const userName = Cookies.get('userName')
     const role = Cookies.get('role')
     const jwtToken = Cookies.get('jwtToken')
-    const currentUrl = window.location.pathname.split('/').pop();
+    // const currentUrl = window.location.pathname.split('/').pop();
     const {draftID} = useAppSelector(state => state.companyReducer)
     const navigate = useNavigate()
+    //const {searchValue} = useAppSelector(state => state.progressReducer)
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -77,7 +78,7 @@ const NavigationBar = () => {
                                 </Link>
                             </Nav.Item>
                         </Nav>
-                        {currentUrl == 'companies' &&
+                        {/*{currentUrl == 'companies' &&*/}
                             <Form onSubmit={handleSearch} className="d-flex">
                                 <FormControl
                                     id={'search-text-field'}
@@ -93,7 +94,6 @@ const NavigationBar = () => {
                                 </Button>
 
                             </Form>
-                        }
                         {jwtToken ? (
                             <>
 

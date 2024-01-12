@@ -84,8 +84,8 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                             <h3>Статус: {singleTender.status}</h3>
                             <div className="info">
                                 <div className="author-info">
-                                        <h4>Имя: {emptyString(singleTender.user.name, "Имя не задано")}</h4>
-                                        <h4>Логин: {emptyString(singleTender.user.login, 'Логин на задан')}</h4>
+                                        <h4>Имя: {emptyString(singleTender.user_name, "Имя не задано")}</h4>
+                                        <h4>Логин: {emptyString(singleTender.user_login, 'Логин на задан')}</h4>
                                 </div>
 
                             </div>

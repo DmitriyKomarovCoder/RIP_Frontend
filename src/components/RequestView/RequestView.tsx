@@ -39,7 +39,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
 
         const handleFilterInterval = setInterval(() => {
             debouncedHandleFilter();
-        }, 10000);
+        }, 5000);
 
 
         const cleanup = () => {
@@ -118,91 +118,89 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
 
     const handleInputChange = () => {
         if (tender) {
-            const d = tender.tenders.filter(obj => obj.user.login == textValue)
+            const d = tender.tenders.filter(obj => obj.user_login === textValue)
             setFilteredUsers(d.length == 0 ? null : d)
         }
     };
 
     return (
         <>
-            <Container className="d-flex justify-content-center">
-                <Row>
-                    <Col>
-                        <Form.Group controlId="exampleForm.ControlInput1" className="ml-3">
-                            <Form.Label className="text-start">Фильтрация по пользователю</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Введите текст"
-                                value={textValue}
-                                onChange={(e) => setTextValue(e.target.value)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleInputChange();
-                                    }
-                                }}
-                                style={{ width: '100%' }}
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
-            </Container>
-
             {/* =================================== ALERTS ===========================================*/}
 
             {error !== "" && <MyComponent isError={true} message={error} />}
             {success !== "" && <MyComponent isError={false} message={success} />}
 
             {/* =================================== FILTERS ======================================*/}
-            {role &&
-                <div className="filter-section d-flex flex-column justify-content-left">
-                    <label>Дата создания с:</label>
-                    <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        className="custom-datepicker"
-                        popperPlacement="bottom-start"
-                    />
 
-                    <label>Дата окончания по:</label>
-                    <DatePicker
-                        selected={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        className="custom-datepicker"
-                        popperPlacement="bottom-start"
-                    />
+            <Container>
+                <Row className="justify-content-center">
+                    <Col md={3} className="mb-3 custom-col">
+                        {role === '2' &&
+                            <Form.Group controlId="exampleForm.ControlInput1" className="custom-form">
+                                <Form.Label className="text-start">Фильтрация по пользователю</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Введите текст"
+                                    value={textValue}
+                                    onChange={(e) => setTextValue(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleInputChange();
+                                        }
+                                    }}
+                                />
+                            </Form.Group>
+                        }
+                        <div className="filter-section d-flex flex-column">
+                            <label>Дата создания с:</label>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                className="custom-datepicker"
+                                popperPlacement="bottom-start"
+                            />
 
-                    {role == '2' &&
-                        <>
-                            <label className="mb-2">Статус тендера:</label>
-                            <Form.Select
-                                className='mb-2'
-                                value={selectedStatus || ""}
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                style={{width: '150px'}}  // Ограничиваем длину статуса
-                            >
-                                <option value="">Выберите статус</option>
-                                <option value="черновик">Черновик</option>
-                                <option value="сформирован">Сформирован</option>
-                                <option value="завершен">Завершён</option>
-                                <option value="отклонен">Отклонён</option>
-                            </Form.Select>
-                        </>
-                    }
+                            <label>Дата окончания по:</label>
+                            <DatePicker
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                className="custom-datepicker"
+                                popperPlacement="bottom-start"
+                            />
 
-                    <Button style={{width: '200px'}} className='mt-2' onClick={handleFilter}>Применить фильтры</Button>
-                    <Button variant="outline-danger" style={{width: '200px'}} className='mt-2' onClick={resetFilter}>Сбросить
-                        фильтры</Button>
-                </div>
-            }
+                            {role === '2' &&
+                                <>
+                                    <label className="mb-2">Статус тендера:</label>
+                                    <Form.Select
+                                        className='mb-2'
+                                        value={selectedStatus || ""}
+                                        onChange={(e) => setSelectedStatus(e.target.value)}
+                                    >
+                                        <option value="">Выберите статус</option>
+                                        <option value="сформирован">Сформирован</option>
+                                        <option value="завершен">Завершён</option>
+                                        <option value="отклонен">Отклонён</option>
+                                    </Form.Select>
+                                </>
+                            }
+
+                            <Button style={{ width: '100%' }} className='mt-2' onClick={handleFilter}>Применить фильтры</Button>
+                            <Button variant="outline-danger" style={{ width: '100%' }} className='mt-2' onClick={resetFilter}>Сбросить фильтры</Button>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+
 
 
             {/* =================================== TABLE ADMIN =============================================*/}
             {tender &&
-                <table className='table-hikes'>
+                <table className='table-tenders'>
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        {/*<th>ID</th>*/}
                         <th>Название тендера</th>
+                        <th>Статус рассмотрения</th>
                         <th>Дата создания</th>
                         <th>Дата начала процесса</th>
                         <th>Дата принятия</th>
@@ -217,25 +215,27 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                     {filteredTenders && role == '0'
                         ? filteredTenders.map((tender) => (
                             <tr key={tender.id} onClick={() => clickCell(tender.id)}>
-                                <td>{tender.id}</td>
+                                {/*<td>{tender.id}</td>*/}
                                 <td>{tender.tender_name || 'Не задано'}</td>
+                                <td>{tender.status_check || 'Не рассмотрен'}</td>
                                 <td>{checkData(tender.creation_date)}</td>
                                 <td>{checkData(tender.formation_date)}</td>
                                 <td>{checkData(tender.completion_date)}</td>
-                                <td>{tender.user.login || 'Не задан'}</td>
+                                <td>{tender.user_login || 'Не задан'}</td>
                                 <td>{tender.status}</td>
                             </tr>
                         ))
                         : (filteredByUsers ? filteredByUsers : tender.tenders).map((tender) => (
                             <tr key={tender.id} onClick={() => clickCell(tender.id)}>
-                                <td>{tender.id}</td>
+                                {/*<td>{tender.id}</td>*/}
                                 <td>{tender.tender_name || 'Не задано'}</td>
+                                <td>{tender.status_check || 'Не рассмотрен'}</td>
                                 <td>{checkData(tender.creation_date)}</td>
                                 <td>{checkData(tender.formation_date)}</td>
                                 <td>{checkData(tender.completion_date)}</td>
-                                <td>{tender.user.login || 'Не задан'}</td>
+                                <td>{tender.user_login || 'Не задан'}</td>
                                 {role == '2' &&
-                                    <td>{tender.moderator.login || 'Не задан'}</td>
+                                    <td>{tender.moderator_login || 'Не задан'}</td>
                                 }
                                 <td>{tender.status}</td>
                             </tr>

@@ -4,7 +4,8 @@ import {
     DateFormat,
     deleteTender,
     emptyString, fetchTenderById,
-    makeTender, moderatorUpdateStatus,
+    makeTender,
+    // moderatorUpdateStatus,
     updateTender
 } from '../../store/reducers/ActionCreator';
 import TableView from '../TableView/TableView.tsx';
@@ -42,22 +43,22 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
         navigate(-1);
     }
 
-    const handlerApprove = () => {
-        if (singleTender) {
-            dispatch(moderatorUpdateStatus(singleTender.id, 'завершен'))
-            navigate(-1);
-        }
-    }
-
-    const handleDiscard = () => {
-        if (singleTender) {
-            dispatch(moderatorUpdateStatus(singleTender.id, 'отклонен'))
-            navigate(-1);
-        }
-    }
-
-    const handleMakeRequest = () => {
-        dispatch(makeTender())
+    // const handlerApprove = () => {
+    //     if (singleTender) {
+    //         dispatch(moderatorUpdateStatus(singleTender.id, 'завершен'))
+    //         navigate(-1);
+    //     }
+    // }
+    //
+    // const handleDiscard = () => {
+    //     if (singleTender) {
+    //         dispatch(moderatorUpdateStatus(singleTender.id, 'отклонен'))
+    //         navigate(-1);
+    //     }
+    // }
+    //
+    const handleMakeRequest = (id: number) => {
+        dispatch(makeTender(id))
         navigate(-1);
     }
 
@@ -92,7 +93,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                             <div className="detail-info">
                                 {singleTender.status !="черновик" && <label>Сформирована: {DateFormat(singleTender.formation_date)}</label>}
                                 <label htmlFor="tenderNameInput" style={{ color: 'white' }}>
-                                    <h4 style={{textAlign: 'left'}}>Имя тендера:</h4>
+                                    <h4 style={{textAlign: 'left'}}>Название тендера:</h4>
                                 </label>
                                 <input
                                     type="text"
@@ -129,7 +130,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                         {/* ======================= КНОПКИ ============================= */}
 
                         <div className='delete-make' style={{display: 'flex', gap: '10px'}}>
-                            {singleTender.status != 'удален' && (
+                            {singleTender.status != 'удален' && singleTender.status == 'черновик' && role == '0' && (
                                 <div style={{flex: 1}}>
                                     <button
                                         type="button"
@@ -146,36 +147,36 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                                     <button
                                         type="button"
                                         className="btn btn-outline-light"
-                                        onClick={handleMakeRequest}
+                                        onClick={() => handleMakeRequest(singleTender.id)}
                                     >
                                         Сформировать
                                     </button>
                                 </div>
                             )}
 
-                            {singleTender.status == 'сформирован' && role == '2' && (
-                                <>
-                                    <div style={{flex: 1}}>
-                                        <button
-                                            type="button"
-                                            className="btn btn-outline-danger"
-                                            onClick={() => handleDiscard()}
-                                        >
-                                            Отказать
-                                        </button>
-                                    </div>
+                            {/*{singleTender.status == 'сформирован' && role == '2' && (*/}
+                            {/*    <>*/}
+                            {/*        <div style={{flex: 1}}>*/}
+                            {/*            <button*/}
+                            {/*                type="button"*/}
+                            {/*                className="btn btn-outline-danger"*/}
+                            {/*                onClick={() => handleDiscard()}*/}
+                            {/*            >*/}
+                            {/*                Отказать*/}
+                            {/*            </button>*/}
+                            {/*        </div>*/}
 
-                                    <div style={{flex: 1}}>
-                                        <button
-                                            type="button"
-                                            className="btn btn-outline-light"
-                                            onClick={handlerApprove}
-                                        >
-                                            Завершить
-                                        </button>
-                                    </div>
-                                </>
-                            )}
+                            {/*        <div style={{flex: 1}}>*/}
+                            {/*            <button*/}
+                            {/*                type="button"*/}
+                            {/*                className="btn btn-outline-light"*/}
+                            {/*                onClick={handlerApprove}*/}
+                            {/*            >*/}
+                            {/*                Завершить*/}
+                            {/*            </button>*/}
+                            {/*        </div>*/}
+                            {/*    </>*/}
+                            {/*)}*/}
                         </div>
                     </>
                 }

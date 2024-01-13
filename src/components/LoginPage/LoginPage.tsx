@@ -24,7 +24,7 @@ const LoginPage: FC<LoginPageProps> = () => {
     };
 
     if (isAuth) {
-        navigate('/')
+        navigate('/companies')
     }
 
     return (

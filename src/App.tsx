@@ -10,10 +10,10 @@ import RegisterPage from "./components/RegisterPage/RegisterPage.tsx";
 import CompanyTable from "./components/CompanyTable/CompanyTable.tsx";
 import CreateCompanyPage from "./components/TableView/AddCompany.tsx";
 import TenderCard from "./components/RequestView/TenderCard.tsx";
-import Menu from "./components/Menu/Menu.tsx";
+// import Menu from "./components/Menu/Menu.tsx";
 
 function App() {
-    const homePage: Breadcrumb = {name: 'Главная', to: ''};
+    const homePage: Breadcrumb = {name: 'Главная', to: 'companies'};
     const addCompanyPage: Breadcrumb = {name: 'Созадние компании', to: 'add-company'};
     const companiesTablePage: Breadcrumb = {name: 'Таблица компаний', to: 'companies/admin'};
     const companiesPage: Breadcrumb = {name: 'Компании', to: 'companies'};
@@ -30,8 +30,8 @@ function App() {
             <>
                 <Routes>
 
-                    <Route path="/" element={
-                        <Menu
+                    <Route path="/companies" element={
+                        <CompaniesList
                             setPage={() => addPage([homePage])}
                         />
                     }/>
@@ -74,10 +74,10 @@ function App() {
 
                     <Route path="/tenders/:tender_id" element={
                         <TenderCard setPage={
-                            (name, id) => addPage([
+                            (id) => addPage([
                                 homePage,
                                 requestPage,
-                                {name: `Тендер: "${name}"`, to: `tender/${id}`}
+                                {name: `Тендер`, to: `tender/${id}`}
                             ])
                         }/>
                     }/>

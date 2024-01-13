@@ -1,8 +1,8 @@
-import {FC, useEffect, useState} from "react";
-import DatePicker from "react-datepicker";
+import React, {FC, useEffect, useState} from "react";
+import DatePicker, {registerLocale, setDefaultLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
-import {fetchTenders, fetchTendersFilter} from "../../store/reducers/ActionCreator.ts";
+import {fetchTenders, fetchTendersFilter, moderatorUpdateStatus} from "../../store/reducers/ActionCreator.ts";
 import MyComponent from "../Popup/Popover.tsx";
 import {Link} from "react-router-dom";
 import "./DatePickerStyle.css";
@@ -13,9 +13,16 @@ import {useNavigate} from 'react-router-dom';
 import Cookies from "js-cookie";
 import {ITender} from "../../models/models.ts";
 import debounce from 'lodash/debounce';
+import ru from 'date-fns/locale/ru';
 interface RequestViewProps {
     setPage: () => void;
 }
+
+registerLocale('ru', ru);
+
+// Устанавливаем русский язык по умолчанию
+setDefaultLocale('ru');
+
 
 const RequestView: FC<RequestViewProps> = ({setPage}) => {
     const navigate = useNavigate();
@@ -104,8 +111,12 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
         }
     }
 
-    const clickCell = (cellID: number) => {
-        navigate(`/tenders/${cellID}`);
+    const clickCell = (cellID: number, event: React.MouseEvent<HTMLTableRowElement>) => {
+        const isInsideButtons = event && (event.target as HTMLElement).closest('.my-3');        if (!isInsideButtons) {
+            if (!isInsideButtons) {
+                navigate(`/tenders/${cellID}`);
+            }
+        }
     }
 
     if (!isAuth) {
@@ -122,6 +133,16 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
             setFilteredUsers(d.length == 0 ? null : d)
         }
     };
+
+    const handlerApprove = (id: number) => {
+        dispatch(moderatorUpdateStatus(id, 'завершен'))
+        //navigate(-1);
+    }
+
+    const handleDiscard = (id: number) => {
+        dispatch(moderatorUpdateStatus(id, 'отклонен'))
+        //navigate(-1);
+    }
 
     return (
         <>
@@ -214,8 +235,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                     <tbody>
                     {filteredTenders && role == '0'
                         ? filteredTenders.map((tender) => (
-                            <tr key={tender.id} onClick={() => clickCell(tender.id)}>
-                                {/*<td>{tender.id}</td>*/}
+                            <tr key={tender.id} onClick={(event) => clickCell(tender.id, event)}>                                {/*<td>{tender.id}</td>*/}
                                 <td>{tender.tender_name || 'Не задано'}</td>
                                 <td>{tender.status_check || 'Не рассмотрен'}</td>
                                 <td>{checkData(tender.creation_date)}</td>
@@ -226,7 +246,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                             </tr>
                         ))
                         : (filteredByUsers ? filteredByUsers : tender.tenders).map((tender) => (
-                            <tr key={tender.id} onClick={() => clickCell(tender.id)}>
+                            <tr key={tender.id} onClick={(event) => clickCell(tender.id, event)}>
                                 {/*<td>{tender.id}</td>*/}
                                 <td>{tender.tender_name || 'Не задано'}</td>
                                 <td>{tender.status_check || 'Не рассмотрен'}</td>
@@ -238,6 +258,24 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                     <td>{tender.moderator_login || 'Не задан'}</td>
                                 }
                                 <td>{tender.status}</td>
+                                <td>
+                                    {tender.status == 'сформирован' && role == '2' && (
+
+                                        <div className='my-3'
+                                             style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                            <Button variant="outline-warning" onClick={() => handlerApprove(tender.id)}
+                                                    className='mb-2'>
+                                                Завершить
+                                            </Button>
+
+                                            <Button variant="outline-danger" onClick={() => handleDiscard(tender.id)}
+                                                    style={{width: '100%'}}>
+                                                Отказать
+                                            </Button>
+                                        </div>
+
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

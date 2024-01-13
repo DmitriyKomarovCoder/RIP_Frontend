@@ -54,11 +54,11 @@ const NavigationBar = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Item className="mx-3">
+                            {/* <Nav.Item className="mx-3">
                                 <Link to="/" className="nav-link ps-0 text-info">
                                     Меню
                                 </Link>
-                            </Nav.Item>
+                            </Nav.Item> */}
                             {role == '2' &&
 
                                 <Nav.Item>

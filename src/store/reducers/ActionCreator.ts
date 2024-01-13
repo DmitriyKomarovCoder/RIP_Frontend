@@ -206,7 +206,7 @@ export const deleteTender = (id: number) => async (dispatch: AppDispatch) => {
     }
 }
 
-export const makeTender = () => async (dispatch: AppDispatch) => {
+export const makeTender = (id: number) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken');
 
     const config = {
@@ -216,7 +216,11 @@ export const makeTender = () => async (dispatch: AppDispatch) => {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
-        data: {}
+        data: {
+            requestId:id,
+            Server_Token:"qwerty",
+            status:"сформирован",
+        }
     }
     try {
         dispatch(tenderSlice.actions.tendersFetching())
@@ -615,7 +619,7 @@ export const loginSession = (login: string, password: string) => async (dispatch
         dispatch(userSlice.actions.startProcess())
         const response = await axios<IAuthResponse>(config);
         const errorText = response.data.description ?? ""
-        const successText = errorText || "Добро пожаловать :)"
+        const successText = errorText || ""
         dispatch(userSlice.actions.setStatuses([errorText, successText]));
         const jwtToken = response.data.access_token
         dispatch(userSlice.actions.setRole(response.data.role ?? ''))
@@ -623,7 +627,6 @@ export const loginSession = (login: string, password: string) => async (dispatch
             Cookies.set('jwtToken', jwtToken);
             Cookies.set('role', response.data.role ?? '');
             dispatch(userSlice.actions.setAuthStatus(true));
-            Cookies.set('userImage', response.data.userImage)
             Cookies.set('userName', response.data.userName)
         }
         setTimeout(() => {

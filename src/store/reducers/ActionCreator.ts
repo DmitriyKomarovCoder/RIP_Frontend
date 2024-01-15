@@ -69,7 +69,7 @@ export const updateCompanyInfo = (
             Authorization: `Bearer ${accessToken}`,
         },
         data: {
-            id: id,
+            company_id: id,
             name: companyName,
             description: description,
             status: status,

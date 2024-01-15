@@ -59,7 +59,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
     //
     const handleMakeRequest = (id: number) => {
         dispatch(makeTender(id))
-        navigate(-1);
+        navigate("/request");
     }
 
     const handleSave = (id: number, tender: ITender) => {

@@ -27,9 +27,11 @@
     justify-content: center;
     align-items: center;
     border: 2px solid rgba(255, 255, 255, 0.66);
-    background: rgba(77, 33, 131, 0.66);
+    background: #3c97bf;
+    border-radius: 15px 15px 20px 20px;
     text-align: center;
     color: #ffffff;
+    font-family: "New Century Schoolbook", "TeX Gyre Schola", serif;
     font-size: 27px;
     white-space: nowrap;
     overflow: hidden;
@@ -38,7 +40,7 @@
 
 .card-company-item:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 14px rgba(61, 61, 61, 0.8);
+    box-shadow: 0 0 14px rgba(38, 190, 239, 0.8);
 }
 
 .card-company-item:hover .photo {
@@ -74,9 +76,10 @@
     opacity: 0;
     transition: opacity 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
+    color: #26BEEFCC;
 }
 
 .circle:hover {
     opacity: 1;
-    background-color: #cc1111;
+    background-color: #58d4ff;
 }

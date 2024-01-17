@@ -88,18 +88,18 @@ const CompaniesDetail: FC<CompanyDetailProps> = ({setPage}) => {
             ? <div>Loading...</div>
             : <div className="company-card-body">
                 <div className="card-container">
-                    <h3>{company?.name}</h3>
                     <img
                         className="round"
                         src={company?.image_url || '/RIP_Frontend/default.png'}
                         alt={company?.name}
                     />
-                    <p>ИИН: {company?.iin}</p>
-                    <p>Описание: {company?.description}</p>
+                    <h3 style={{color: 'white'}}>{company?.name}</h3>
+                    <h6 style={{color: 'white'}}>ИИН: {company?.iin}</h6>
+                    <h6 style={{color: 'white'}}>Статус: {company?.status}</h6>
+                    <p style={{color: 'white'}}>{company?.description}</p>
                     <div className="buttons">
-                        <button className="primary" onClick={BackHandler}>Назад</button>
-                        <div></div>
-                        <button className="primary ghost">Добавить</button>
+                        <button className="btn btn-primary" onClick={BackHandler}>Назад</button>
+                        {/*<button className="primary ghost">Записаться</button>*/}
                     </div>
                 </div>
             </div>

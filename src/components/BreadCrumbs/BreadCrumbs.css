@@ -12,12 +12,7 @@
     color: #3b3b3b;
 }
 
-.breadcrumb {
-    color: #430087;
-    cursor: pointer;
-}
-
 .breadcrumb:hover {
-    color: #ff00f3;
+    color: #007bff;
     cursor: pointer;
 }

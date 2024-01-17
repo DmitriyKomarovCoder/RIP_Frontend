@@ -19,38 +19,29 @@ const NavigationBar: FC<NavigationBarProps> = ({handleSearchValue}) => {
     };
 
     return (
-        <Navbar expand="sm" style={{ backgroundColor: '#6e608d' }}>
-            <div className='container-xl px-4 px-sm-4'>
+        <Navbar expand="sm" className='bg-black' data-bs-theme="dark">
+            <div className='container-xl px-2 px-sm-3'>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Item>
-                            <Link to="/сompanies" className="nav-link ps-0">Компании</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link to="/сompanies" className="nav-link">Тендеры</Link>
+                            <Link to="/companies" className="nav-link ps-0">Компании</Link>
                         </Nav.Item>
                     </Nav>
-                    <div className='container-xl px-4 px-sm-4'>
-                        <div className='mx-auto d-flex w-100'>
-                            <Form onSubmit={handleSearch} className="d-flex align-items-center w-100">
-                                <FormControl
-                                    id={'search-text-field'}
-                                    type="text"
-                                    name="search"
-                                    placeholder="Название компании"
-                                    className="me-2 w-100"
-                                    aria-label="Search"
-                                />
-                                <Button type="submit" variant="outline-light">Поиск</Button>
-                            </Form>
-                        </div>
-                    </div>
+                    <Form onSubmit={handleSearch} className="d-flex">
+                        <FormControl
+                            id={'search-text-field'}
+                            type="text"
+                            name="search"
+                            placeholder="Поиск городов"
+                            className="me-2"
+                            aria-label="Search"
+                        />
+                        <Button type="submit" variant="outline-light">Поиск</Button>
+                    </Form>
                 </Navbar.Collapse>
             </div>
         </Navbar>
-
     );
 }
-
 export default NavigationBar;

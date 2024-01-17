@@ -40,19 +40,6 @@ export const fetchCompanies = (searchValue?: string, makeLoading: boolean = true
 }
 
 
-// export const fetchCompanies = (searchValue?: string) => async (dispatch: AppDispatch) => {
-//     const accessToken = Cookies.get('jwtToken')
-//     dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
-//     try {
-//         dispatch(companySlice.actions.companiesFetching())
-//         const response = await axios.get<ICompanyWithDraft>('/api/companies' + `?company_name=${searchValue ?? ''}`)
-//         dispatch(companySlice.actions.companiesFetched([response.data.companies, response.data.draft_id]))
-//     } catch (e) {
-//         dispatch(companySlice.actions.companiesFetchedError(`Ошибка: ${e}`))
-//         dispatch(companySlice.actions.companiesFetched([filterMockData(searchValue), 0]))
-//     }
-// }
-//
 export const updateCompanyInfo = (
     id: number,
     companyName: string,

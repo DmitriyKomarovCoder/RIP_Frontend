@@ -20,14 +20,10 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 const NavigationBar = () => {
     const dispatch = useAppDispatch()
     const {isLoading, success, error} = useAppSelector(state => state.userReducer)
-    // const userImage = Cookies.get('userImage')
-    // const userName = Cookies.get('userName')
     const role = Cookies.get('role')
     const jwtToken = Cookies.get('jwtToken')
-    // const currentUrl = window.location.pathname.split('/').pop();
     const {draftID} = useAppSelector(state => state.companyReducer)
     const navigate = useNavigate()
-    //const {searchValue} = useAppSelector(state => state.progressReducer)
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -78,7 +74,6 @@ const NavigationBar = () => {
                                 </Link>
                             </Nav.Item>
                         </Nav>
-                        {/*{currentUrl == 'companies' &&*/}
                             <Form onSubmit={handleSearch} className="d-flex">
                                 <FormControl
                                     id={'search-text-field'}
@@ -120,13 +115,6 @@ const NavigationBar = () => {
                                     </Nav.Item>
                                 </Nav>
                                 {/*<div className="avatar-container d-flex align-items-center">*/}
-                                {/*    <Nav.Item>*/}
-                                {/*        <img*/}
-                                {/*            src={userImage || defaultImage}*/}
-                                {/*            alt="User Avatar"*/}
-                                {/*            className="avatar me-2"*/}
-                                {/*        />*/}
-                                {/*    </Nav.Item>*/}
                                 {/*    <Nav.Item className="mx-2 mt-2">*/}
                                 {/*        <FormLabel>{userName || 'Не задано'}</FormLabel>*/}
                                 {/*    </Nav.Item>*/}

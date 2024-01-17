@@ -16,7 +16,7 @@ export interface ICompany {
     image_url?: string,
 }
 
-export interface ICompanyWithDraft { // ICityWithBasket
+export interface ICompanyWithDraft {
     draft_id: number,
     companies: ICompany[],
 }
@@ -25,7 +25,7 @@ export interface IDefaultResponse {
     description?: string
 }
 
-export interface ICompanyTenders { // IDestinationHikes
+export interface ICompanyTenders {
     id: number,
     company_id: number,
     tender_id: number,
@@ -88,8 +88,8 @@ export interface ITenderResponse {
     status: string
 }
 
-export interface IDeleteCompanyTender { // IDeleteDestinationHike
-    deleted_company_tender: number, // company_tender
+export interface IDeleteCompanyTender {
+    deleted_company_tender: number,
     status: string,
     description?: string,
 }

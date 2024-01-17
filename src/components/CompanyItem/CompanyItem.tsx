@@ -26,7 +26,7 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer}) => {
     }
 
     return (
-        <div className="card-city-item" data-city-id={company.company_id}>
+        <div className="company-city-item" data-city-id={company.company_id}>
             <img
                 src={company.image_url}
                 alt="Image"

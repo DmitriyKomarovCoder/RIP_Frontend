@@ -1,4 +1,4 @@
-.card-city-item {
+.company-city-item {
     background-color: #18181B;
     position: relative;
     overflow: hidden;
@@ -38,12 +38,12 @@
     text-overflow: ellipsis;
 }
 
-.card-city-item:hover {
+.company-city-item:hover {
     transform: scale(1.05);
     box-shadow: 0 0 14px rgba(38, 190, 239, 0.8);
 }
 
-.card-city-item:hover .photo {
+.company-city-item:hover .photo {
     filter: brightness(0.7);
 }
 
@@ -57,11 +57,11 @@
     transition: opacity 0.3s ease;
 }
 
-.card-city-item:hover .deleted-trash {
+.company-city-item:hover .deleted-trash {
     opacity: 1;
 }
 
-.card-city-item:hover .circle {
+.company-city-item:hover .circle {
     opacity: 1;
 }
 

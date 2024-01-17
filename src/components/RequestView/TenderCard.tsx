@@ -25,10 +25,6 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
     const {singleTender, success, error} = useAppSelector(state => state.tenderReducer)
-    //const [startTenderDate, setStartTenderDate] = useState('');
-    //const [endTenderDate, setEndTenderDate] = useState('');
-    // const [leader, setLeader] = useState('$');
-    //const [description, setDescription] = useState('$');
     const [tenderName, setTenderName] = useState('$');
     const role = Cookies.get('role')
 
@@ -43,20 +39,6 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
         navigate(-1);
     }
 
-    // const handlerApprove = () => {
-    //     if (singleTender) {
-    //         dispatch(moderatorUpdateStatus(singleTender.id, 'завершен'))
-    //         navigate(-1);
-    //     }
-    // }
-    //
-    // const handleDiscard = () => {
-    //     if (singleTender) {
-    //         dispatch(moderatorUpdateStatus(singleTender.id, 'отклонен'))
-    //         navigate(-1);
-    //     }
-    // }
-    //
     const handleMakeRequest = (id: number) => {
         dispatch(makeTender(id))
         navigate("/request");

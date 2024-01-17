@@ -25,10 +25,6 @@ const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
         dispatch(fetchCompanies(searchValue))
     }, [searchValue]);
 
-    // const didTapBasket = () => {
-    //     navigate(`/tenders/${draftID}`);
-    // }
-
     if (!companies) {
         return <h3>Данных нет</h3>
     }
@@ -38,16 +34,6 @@ const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
             {isLoading && <LoadAnimation/>}
             {error != "" && <MyComponent isError={true} message={error}/>}
             {success != "" && <MyComponent isError={false} message={success}/>}
-            {/*<div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>*/}
-            {/*    <Button*/}
-            {/*        variant="primary"*/}
-            {/*        onClick={didTapBasket}*/}
-            {/*        disabled={draftID == 0}*/}
-            {/*        style={{position: 'absolute', right: 40}}*/}
-            {/*    >*/}
-            {/*        Создать тендер*/}
-            {/*    </Button>*/}
-            {/*</div>*/}
             <List items={companies ?? []} renderItem={(company: ICompany) =>
                 <CompanyItem
                     key={company.company_id}

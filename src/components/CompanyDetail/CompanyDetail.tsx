@@ -18,39 +18,6 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
     const navigate = useNavigate();
     //const role = Cookies.get('role')
 
-    // const handleDelete = () => {
-    //     navigate('/companies');
-    //     DeleteData()
-    //         .then(() => {
-    //             console.log(`Company with ID ${company?.company_id} successfully deleted.`);
-    //         })
-    //         .catch(error => {
-    //             console.error(`Failed to delete company with ID ${company?.company_id}: ${error}`);
-    //             navigate('/companies');
-    //         });
-    // }
-
-    // const DeleteData = async () => {
-    //     try {
-    //         const response = await fetch('http://127.0.0.1:8080/api/companies/delete/' + company?.company_id, {
-    //             method: 'DELETE',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //
-    //         if (response.status === 200) {
-    //             console.log('Компания успешно удалена');
-    //             window.location.reload();
-    //         } else {
-    //             console.error('Произошла ошибка при удалении компании');
-    //         }
-    //
-    //     } catch (error) {
-    //         console.error('Произошла ошибка сети', error);
-    //     }
-    // }
-
     const BackHandler = () => {
         navigate('/companies');
     }

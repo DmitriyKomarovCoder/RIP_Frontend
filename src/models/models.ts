@@ -101,7 +101,7 @@ export const mockCompanies: ICompany[] = [
         name: "Авто-Про",
         status: "действует",
         iin: "12345678901",
-        image_url: " /RIP_Front/imag4.png",
+        image_url: " /RIP_Frontend/imag4.png",
     },
     {
         company_id: 2,
@@ -109,7 +109,7 @@ export const mockCompanies: ICompany[] = [
         name: "ГрузМотор",
         status: "действует",
         iin: "98765432109",
-        image_url: "/RIP_Front/img2.png",
+        image_url: "/RIP_Frontend/img2.png",
     },
     {
         company_id: 3,
@@ -117,7 +117,7 @@ export const mockCompanies: ICompany[] = [
         name: "Ретро-Запчасти",
         status: "действует",
         iin: "98765432109",
-        image_url: "/RIP_Front/img1.png",
+        image_url: "/RIP_Frontend/img1.png",
     },
     {
         company_id: 4,
@@ -125,6 +125,6 @@ export const mockCompanies: ICompany[] = [
         name: "Эко-Мобиль",
         status: "действует",
         iin: "56789012345",
-        image_url:"/RIP_Front/img3.jpg" // "/RIP_Frontend/img3.jpg",
+        image_url:"/RIP_Frontend/img3.jpg" // "/RIP_Frontend/img3.jpg",
     },
 ];

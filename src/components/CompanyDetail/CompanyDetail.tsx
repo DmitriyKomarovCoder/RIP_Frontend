@@ -30,7 +30,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
         <>
             {isLoading && <h1> Загрузка данных .... </h1>}
             {error && <h1>Ошибка {error} </h1>}
-            {<div className="city-card-body">
+            {<div className="company-card-body">
                 <div className="card-container">
                     <img
                         className="round"

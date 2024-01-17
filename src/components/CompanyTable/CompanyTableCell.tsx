@@ -78,12 +78,12 @@ const CompanyTableCell: FC<CompanyTableCellProps> = ({companyData}) => {
                         />
                     </Form.Group>
                     <Form.Group as={Col} controlId="formCompanyIIN" className='mt-2'>
-                        <Form.Label>Название компании</Form.Label>
+                        <Form.Label>ИИН</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Введите ИИН"
-                            name="name"
-                            value={name}
+                            name="inn"
+                            value={inn}
                             onChange={handleInputChangeIIN}
                         />
                     </Form.Group>

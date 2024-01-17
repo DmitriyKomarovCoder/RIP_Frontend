@@ -12,39 +12,6 @@ const CompaniesDetail: FC<CompanyDetailProps> = ({setPage}) => {
     const [company, setCompany] = useState<ICompany | null>(null);
     const navigate = useNavigate();
 
-    // const handleDelete = () => {
-    //     navigate('/companies');
-    //     DeleteData()
-    //         .then(() => {
-    //             console.log(`Company with ID ${company?.company_id} successfully deleted.`);
-    //         })
-    //         .catch(error => {
-    //             console.error(`Failed to delete company with ID ${company?.company_id}: ${error}`);
-    //             navigate('/companies');
-    //         });
-    // }
-
-    // const DeleteData = async () => {
-    //     try {
-    //         const response = await fetch('http://0.0.0.0:8080/api/companies', {
-    //             method: 'DELETE',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //
-    //         if (response.status === 200) {
-    //             console.log('Company успешно удален');
-    //             window.location.reload();
-    //         } else {
-    //             console.error('Произошла ошибка при удалении company');
-    //         }
-    //
-    //     } catch (error) {
-    //         console.error('Произошла ошибка сети', error);
-    //     }
-    // }
-
     const BackHandler = () => {
         navigate('/companies');
     }
@@ -99,7 +66,6 @@ const CompaniesDetail: FC<CompanyDetailProps> = ({setPage}) => {
                     <p style={{color: 'white'}}>{company?.description}</p>
                     <div className="buttons">
                         <button className="btn btn-primary" onClick={BackHandler}>Назад</button>
-                        {/*<button className="primary ghost">Записаться</button>*/}
                     </div>
                 </div>
             </div>

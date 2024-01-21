@@ -4,18 +4,18 @@ interface searchState {
     type: string
 
     user: string
-    status: string
-    formationDateStart: string | null
-    formationDateEnd: string | null
+    selectedStatus: string
+    startDate: Date | null
+    endDate: Date | null
 }
 
 const initialState: searchState = {
     type: '',
 
     user: '',
-    status: '',
-    formationDateStart: null,
-    formationDateEnd: null,
+    selectedStatus: '',
+    startDate: null,
+    endDate: null,
 }
 
 export const searchSlice = createSlice({
@@ -29,20 +29,20 @@ export const searchSlice = createSlice({
             state.user = action.payload
         },
         setStatus: (state, action: PayloadAction<string>) => {
-            state.status = action.payload
+            state.selectedStatus = action.payload
         },
-        setDateStart: (state, action: PayloadAction<string>) => {
-            state.formationDateStart = action.payload
+        setDateStart: (state, action: PayloadAction<Date>) => {
+            state.startDate = action.payload
         },
-        setDateEnd: (state, action: PayloadAction<string>) => {
-            state.formationDateEnd = action.payload
+        setDateEnd: (state, action: PayloadAction<Date>) => {
+            state.endDate = action.payload
         },
         reset: (state) => {
             state.type = ''
-            state.formationDateEnd = null
+            state.endDate = null
             state.user = ''
-            state.status = ''
-            state.formationDateStart = null
+            state.selectedStatus = ''
+            state.startDate = null
         }
     },
 });

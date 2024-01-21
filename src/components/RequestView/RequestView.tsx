@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import DatePicker, {registerLocale, setDefaultLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
-import {fetchTenders, fetchTendersFilter, moderatorUpdateStatus} from "../../store/reducers/ActionCreator.ts";
+import {fetchTendersFilter, moderatorUpdateStatus} from "../../store/reducers/ActionCreator.ts";
 import MyComponent from "../Popup/Popover.tsx";
 import {Link} from "react-router-dom";
 import "./DatePickerStyle.css";
@@ -14,6 +14,8 @@ import Cookies from "js-cookie";
 import {ITender} from "../../models/models.ts";
 import debounce from 'lodash/debounce';
 import ru from 'date-fns/locale/ru';
+import {searchSlice} from "../../store/reducers/SearchSlice.ts";
+
 interface RequestViewProps {
     setPage: () => void;
 }
@@ -29,9 +31,10 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
     const dispatch = useAppDispatch();
     const {tender, error, success} = useAppSelector((state) => state.tenderReducer);
     const {isAuth} = useAppSelector((state) => state.userReducer);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
-    const [selectedStatus, setSelectedStatus] = useState<string>('');
+    const {startDate, endDate,selectedStatus} = useAppSelector((state) => state.searchReducer);
+    //const [startDate, setStartDate] = useState<Date | null>(null);
+    //const [endDate, setEndDate] = useState<Date | null>(null);
+    //const [selectedStatus, setSelectedStatus] = useState<string>('');
     const role = Cookies.get('role')
     const [filteredTenders, setFilteredTenders] = useState<ITender[] | null>(null);
     const [filteredByUsers, setFilteredUsers] = useState<ITender[] | null>(null);
@@ -39,8 +42,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
 
     useEffect(() => {
         setPage();
-        dispatch(fetchTenders());
-
+        handleFilter()
         const debouncedHandleFilter = debounce(handleFilter, 1000); // Настройте время задержки по своему усмотрению
 
 
@@ -62,9 +64,8 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
     }, [startDate, endDate, selectedStatus]);
 
     const resetFilter = () => {
-        setStartDate(null)
-        setEndDate(null)
-        setSelectedStatus('')
+        dispatch(searchSlice.actions.reset())
+        handleFilter()
     }
 
     const handleFilter = () => {
@@ -176,7 +177,11 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                             <label>Дата создания с:</label>
                             <DatePicker
                                 selected={startDate}
-                                onChange={(date) => setStartDate(date)}
+                                onChange={(date) => {
+                                    if (date) {
+                                        dispatch(searchSlice.actions.setDateStart(date));
+                                    }
+                                }}
                                 className="custom-datepicker"
                                 popperPlacement="bottom-start"
                             />
@@ -184,7 +189,11 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                             <label>Дата окончания по:</label>
                             <DatePicker
                                 selected={endDate}
-                                onChange={(date) => setEndDate(date)}
+                                onChange={(date) => {
+                                    if (date) {
+                                        dispatch(searchSlice.actions.setDateEnd(date));
+                                    }
+                                }}
                                 className="custom-datepicker"
                                 popperPlacement="bottom-start"
                             />
@@ -195,7 +204,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                     <Form.Select
                                         className='mb-2'
                                         value={selectedStatus || ""}
-                                        onChange={(e) => setSelectedStatus(e.target.value)}
+                                        onChange={(e) => dispatch(searchSlice.actions.setStatus(e.target.value))}
                                     >
                                         <option value="">Выберите статус</option>
                                         <option value="сформирован">Сформирован</option>

@@ -1,10 +1,9 @@
 import {Link, useNavigate} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
+// import Form from 'react-bootstrap/Form';
+// import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import React from 'react';
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
 import LoadAnimation from "../Popup/MyLoaderComponents.tsx";
 import MyComponent from "../Popup/Popover.tsx";
@@ -13,9 +12,9 @@ import {userSlice} from "../../store/reducers/UserSlice.ts";
 // import {FormLabel} from "react-bootstrap";
 import './NavigationBar.css'
 // import {defaultImage} from "../../models/models.ts";
-import {progressSlice} from "../../store/reducers/ProgressData.ts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import {FormLabel} from "react-bootstrap";
 
 const NavigationBar = () => {
     const dispatch = useAppDispatch()
@@ -24,12 +23,7 @@ const NavigationBar = () => {
     const jwtToken = Cookies.get('jwtToken')
     const {draftID} = useAppSelector(state => state.companyReducer)
     const navigate = useNavigate()
-
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const inputValue = (e.currentTarget.elements.namedItem('search') as HTMLInputElement)?.value;
-        dispatch(progressSlice.actions.setSearch(inputValue))
-    };
+    const userName = Cookies.get('userName')
 
     const handleLogout = () => {
         console.log('tap')
@@ -74,21 +68,21 @@ const NavigationBar = () => {
                                 </Link>
                             </Nav.Item>
                         </Nav>
-                            <Form onSubmit={handleSearch} className="d-flex">
-                                <FormControl
-                                    id={'search-text-field'}
-                                    type="text"
-                                    name="search"
-                                    placeholder="Поиск компаний"
-                                    className="me-2"
-                                    aria-label="Search"
-                                />
+                            {/*<Form onSubmit={handleSearch} className="d-flex">*/}
+                            {/*    <FormControl*/}
+                            {/*        id={'search-text-field'}*/}
+                            {/*        type="text"*/}
+                            {/*        name="search"*/}
+                            {/*        placeholder="Поиск компаний"*/}
+                            {/*        className="me-2"*/}
+                            {/*        aria-label="Search"*/}
+                            {/*    />*/}
 
-                                <Button type="submit" variant="outline-light">
-                                    Поиск
-                                </Button>
+                            {/*    <Button type="submit" variant="outline-light">*/}
+                            {/*        Поиск*/}
+                            {/*    </Button>*/}
 
-                            </Form>
+                            {/*</Form>*/}
                         {jwtToken ? (
                             <>
 
@@ -114,11 +108,11 @@ const NavigationBar = () => {
                                         />
                                     </Nav.Item>
                                 </Nav>
-                                {/*<div className="avatar-container d-flex align-items-center">*/}
-                                {/*    <Nav.Item className="mx-2 mt-2">*/}
-                                {/*        <FormLabel>{userName || 'Не задано'}</FormLabel>*/}
-                                {/*    </Nav.Item>*/}
-                                {/*</div>*/}
+                                <div className="avatar-container d-flex align-items-center">
+                                    <Nav.Item className="mx-2 mt-2">
+                                        <FormLabel>{userName || 'Не задано'}</FormLabel>
+                                    </Nav.Item>
+                                </div>
                             </>
                         ) : (
                             <>

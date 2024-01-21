@@ -34,7 +34,7 @@ const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
     useEffect(() => {
         setPage()
         dispatch(fetchCompanies(searchText))
-    }, [dispatch]);
+    }, []);
 
     if (!companies) {
         return <h3>Данных нет</h3>

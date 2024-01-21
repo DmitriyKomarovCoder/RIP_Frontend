@@ -3,12 +3,13 @@ import companyReducer from "./reducers/CompanySlice.ts"
 import tenderReducer from "./reducers/TenderSlice.ts"
 import userReducer from "./reducers/UserSlice.ts"
 import progressReducer from "./reducers/ProgressData.ts";
-
+import searchReducer from "./reducers/SearchSlice.ts"
 const rootReducer = combineReducers({
     companyReducer,
     tenderReducer,
     userReducer,
-    progressReducer
+    progressReducer,
+    searchReducer
 })
 
 export const setupStore = () => {

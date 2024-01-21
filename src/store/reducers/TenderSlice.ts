@@ -38,7 +38,7 @@ export const tenderSlice = createSlice({
             state.isLoading = false
             const text = action.payload.description ?? ""
             state.error = text
-            state.success = "Компания успешно удалён из заявки"
+            state.success = "Компания успешна удалена из заявки"
         },
         tendersUpdated(state, action: PayloadAction<string[]>) {
             state.isLoading = false

@@ -2,7 +2,6 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface searchState {
     type: string
-
     user: string
     selectedStatus: string
     startDate: Date | null

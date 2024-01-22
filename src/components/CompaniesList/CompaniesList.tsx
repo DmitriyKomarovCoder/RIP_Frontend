@@ -14,6 +14,9 @@ import FormControl from "react-bootstrap/FormControl";
 import {searchSlice} from "../../store/reducers/SearchSlice.ts";
 import {RootState} from "../../store/store.ts";
 import {useSelector} from "react-redux";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faShoppingCart} from "@fortawesome/free-solid-svg-icons";
+import Nav from "react-bootstrap/Nav";
 //import {companySlice} from "../../store/reducers/CompanySlice.ts";
 // import {useSelector} from "react-redux";
 // import {RootState} from "../../store/store.ts";
@@ -22,18 +25,25 @@ import {useSelector} from "react-redux";
 
 interface CompaniesListProps {
     setPage: () => void
+    draftID: number | null
+    setDraftID: (draftID: number | null) => void;
 }
 
-const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
+const CompaniesList: FC<CompaniesListProps> = ({setPage, draftID, setDraftID}) => {
     const dispatch = useAppDispatch()
     const searchText = useSelector((state: RootState) => state.searchReducer.type);
     const {companies, isLoading, error, success /*,draftID*/} = useAppSelector(state => state.companyReducer)
     const navigate = useNavigate();
     //const {searchValue} = useAppSelector(state => state.progressReducer)
+    //const [draftID, setDraft] = useState<number | null>(null)
 
     useEffect(() => {
-        setPage()
-        dispatch(fetchCompanies(searchText))
+        setPage();
+        const fetchCompaniesAndSetDraft = async () => {
+            const draftId = await dispatch(fetchCompanies(searchText));
+            setDraftID(draftId);
+        };
+        fetchCompaniesAndSetDraft();
     }, []);
 
     if (!companies) {
@@ -48,6 +58,19 @@ const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
     return (
     
         <>
+            <Nav.Item className="mx-2">
+                <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    className={`my-2 mr-2 ${draftID === 0 ? 'disabled' : ''}`}
+                    onClick={() => draftID !== 0 && navigate(`/tenders/${draftID}`)}
+                    style={{
+                        cursor: draftID === 0 ? 'not-allowed' : 'pointer',
+                        fontSize: draftID === 0 ? '1.5em' : '2em', // Измените размер в зависимости от условия
+                        color: draftID === 0 ? '#777777' : 'white', // Измените цвет в зависимости от условия
+                        transition: 'color 0.3s ease', // Добавьте плавный переход цвета
+                    }}
+                />
+            </Nav.Item>
             <Form onSubmit={handleSearch} className="d-flex">
                 <FormControl
                     id={'search-text-field'}
@@ -74,6 +97,7 @@ const CompaniesList: FC<CompaniesListProps> = ({setPage}) => {
                     company={company}
                     isServer={true}
                     onClick={(num) => navigate(`/companies/${num}`)}
+                    setDraftID={setDraftID}
                 />
             }
             />

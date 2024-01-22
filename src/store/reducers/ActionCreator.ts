@@ -17,7 +17,7 @@ import {userSlice} from "./UserSlice.ts";
 
 
 export const fetchCompanies = (searchValue?: string, makeLoading: boolean = true) => async (dispatch: AppDispatch) => {
-    const accessToken = Cookies.get('jwtToken')
+    const accessToken = Cookies.get('jwtToken');
     dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
     const config = {
         method: "get",
@@ -25,19 +25,23 @@ export const fetchCompanies = (searchValue?: string, makeLoading: boolean = true
         headers: {
             Authorization: `Bearer ${accessToken ?? ''}`,
         },
-    }
+    };
 
     try {
         if (makeLoading) {
-            dispatch(companySlice.actions.companiesFetching())
+            dispatch(companySlice.actions.companiesFetching());
         }
         const response = await axios<ICompanyWithDraft>(config);
-        dispatch(companySlice.actions.companiesFetched([response.data.companies, response.data.draft_id]))
+        const draftId = response.data.draft_id;
+        dispatch(companySlice.actions.companiesFetched([response.data.companies, draftId]));
+
+        return draftId;
     } catch (e) {
-        // dispatch(citySlice.actions.citiesFetchedError(`Пожалуйста, авторизуйтесь (`))
-        dispatch(companySlice.actions.companiesFetched([filterMockData(searchValue), 0]))
+        dispatch(companySlice.actions.companiesFetched([filterMockData(searchValue), 0]));
+        return null;
     }
-}
+};
+
 
 
 export const updateCompanyInfo = (
@@ -132,7 +136,7 @@ export const deleteCompany = (companyId: number) => async (dispatch: AppDispatch
 }
 
 
-export const addCompanyIntoTender = (companyId: number, cash: number, companyName: string) => async (dispatch: AppDispatch) => {
+export const addCompanyIntoTender = (companyId: number, cash: number, companyName: string) => async (dispatch: AppDispatch): Promise<number | null> => {
     const accessToken = Cookies.get('jwtToken');
     const config = {
         method: "post",
@@ -147,18 +151,17 @@ export const addCompanyIntoTender = (companyId: number, cash: number, companyNam
     }
 
     try {
-        //dispatch(companySlice.actions.companiesFetching())
         const response = await axios(config);
-        const errorText = response.data.description ?? ""
-        const successText = errorText || `Компания "${companyName}" добавлена`
+        const errorText = response.data.description ?? "";
+        const successText = errorText || `Компания "${companyName}" добавлена`;
+
         dispatch(companySlice.actions.companyAddedIntoTender([errorText, successText]));
-        dispatch(companySlice.actions.setDraft(response.data.id))
-        setTimeout(() => {
-            dispatch(companySlice.actions.companyAddedIntoTender(['', '']));
-            // dispatch(companySlice.actions.setDraft(response.data.id))
-        }, 6000);
+
+        // Возвращаем только id из ответа
+        return response.data.id;
     } catch (e) {
-        dispatch(companySlice.actions.companiesFetchedError(`${e}`))
+        dispatch(companySlice.actions.companiesFetchedError(`${e}`));
+        return null; // Возвращаем null в случае ошибки
     }
 }
 
@@ -180,7 +183,7 @@ export const deleteTender = (id: number) => async (dispatch: AppDispatch) => {
         const response = await axios(config);
         const errorText = response.data.description ?? ""
         const successText = errorText || `Заявка удалена`
-        dispatch(companySlice.actions.setDraft(0))
+        //dispatch(companySlice.actions.setDraft(0))
         dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
         if (successText != "") {
             dispatch(fetchTenders())
@@ -215,7 +218,7 @@ export const makeTender = (id: number) => async (dispatch: AppDispatch) => {
         const errorText = response.data.description ?? ""
         const successText = errorText || `Заявка создана`
         dispatch(tenderSlice.actions.tendersUpdated([errorText, successText]));
-        dispatch(companySlice.actions.setDraft(0))
+        //dispatch(companySlice.actions.setDraft(0))
         if (successText != "") {
             dispatch(fetchTenders())
         }
@@ -280,25 +283,25 @@ export const fetchTenders = () => async (dispatch: AppDispatch) => {
     }
 }
 
-export const fetchCurrentTender = () => async (dispatch: AppDispatch) => {
-    interface ISingleTenderResponse {
-        tenders: number,
-    }
-
-    const accessToken = Cookies.get('jwtToken');
-    dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
-    try {
-        const response = await axios.get<ISingleTenderResponse>(`/api/tenders/current`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-        dispatch(companySlice.actions.setDraft(response.data.tenders))
-
-    } catch (e) {
-        dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
-    }
-}
+// export const fetchCurrentTender = () => async (dispatch: AppDispatch) => {
+//     interface ISingleTenderResponse {
+//         tenders: number,
+//     }
+//
+//     const accessToken = Cookies.get('jwtToken');
+//     dispatch(userSlice.actions.setAuthStatus(accessToken != null && accessToken != ""));
+//     try {
+//         const response = await axios.get<ISingleTenderResponse>(`/api/tenders/current`, {
+//             headers: {
+//                 Authorization: `Bearer ${accessToken}`
+//             }
+//         });
+//         //dispatch(companySlice.actions.setDraft(response.data.tenders))
+//
+//     } catch (e) {
+//         dispatch(tenderSlice.actions.tendersFetchedError(`${e}`))
+//     }
+// }
 
 export const fetchTenderById = (
     id: string,

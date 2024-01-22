@@ -22,7 +22,6 @@ interface RequestViewProps {
 
 registerLocale('ru', ru);
 
-// Устанавливаем русский язык по умолчанию
 setDefaultLocale('ru');
 
 

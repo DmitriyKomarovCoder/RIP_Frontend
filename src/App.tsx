@@ -19,6 +19,8 @@ function App() {
     const companiesPage: Breadcrumb = {name: 'Компании', to: 'companies'};
     const requestPage: Breadcrumb = {name: 'Заявки', to: 'request'};
     const [pages, setPage] = useState<Breadcrumb[]>([companiesPage])
+    const [draftID, setDraftID] = useState<number | null>(0);
+
     const addPage = (newPage: Breadcrumb[]) => {
         setPage(newPage);
     };
@@ -33,12 +35,16 @@ function App() {
                     <Route path="/companies" element={
                         <CompaniesList
                             setPage={() => addPage([homePage])}
+                            draftID={draftID}
+                            setDraftID={setDraftID}
                         />
                     }/>
 
                     <Route path="/companies" element={
                         <CompaniesList
                             setPage={() => addPage([homePage, companiesPage])}
+                            draftID={draftID}
+                            setDraftID={setDraftID}
                         />
                     }
                     />

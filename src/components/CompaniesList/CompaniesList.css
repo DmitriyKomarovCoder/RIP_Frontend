@@ -7,6 +7,12 @@
 }
 
 body {
-    background-color: #c9c2c2;
-            /*#18181B;*/
+    background-color: #ffffff;
+    background-image: url("bg1.png");
+    background-size: cover; /* чтобы картинка занимала весь экран */
+    background-position: center; /* устанавливаем картинку по центру */
+    background-repeat: no-repeat; /* чтобы избежать повторения картинки */
+    margin: 0;
+    padding: 0px;
+    font-family: Arial, sans-serif;
 }

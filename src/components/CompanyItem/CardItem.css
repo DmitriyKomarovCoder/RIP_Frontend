@@ -27,7 +27,7 @@
     justify-content: center;
     align-items: center;
     border: 2px solid rgba(255, 255, 255, 0.66);
-    background: #3c97bf;
+    background: #dc3545;
     border-radius: 15px 15px 20px 20px;
     text-align: center;
     color: #ffffff;
@@ -40,7 +40,7 @@
 
 .company-city-item:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 14px rgba(38, 190, 239, 0.8);
+    box-shadow: 0 0 14px rgb(220, 53, 69);
 }
 
 .company-city-item:hover .photo {
@@ -76,10 +76,10 @@
     opacity: 0;
     transition: opacity 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
-    color: #26BEEFCC;
+    color: #dc3545;
 }
 
 .circle:hover {
     opacity: 1;
-    background-color: #58d4ff;
+    background-color: rgba(220, 53, 69, 0.25);
 }

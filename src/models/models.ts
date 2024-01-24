@@ -101,7 +101,7 @@ export const mockCompanies: ICompany[] = [
         name: "Авто-Про",
         status: "действует",
         iin: "12345678901",
-        image_url: " /RIP_Frontend/imag4.png",
+        image_url: "/RIP_Frontend/imag4.png",
     },
     {
         company_id: 2,

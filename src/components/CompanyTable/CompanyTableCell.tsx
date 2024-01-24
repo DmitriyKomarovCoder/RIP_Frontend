@@ -122,7 +122,7 @@ const CompanyTableCell: FC<CompanyTableCellProps> = ({companyData}) => {
                     </Form.Group>
 
                     <div style={{display: 'flex', justifyContent: 'space-between'}} className='my-3'>
-                        <Button variant="primary" onClick={handleSaveClick}>
+                        <Button variant="btn btn-danger" onClick={handleSaveClick}>
                             Сохранить изменения
                         </Button>
 
@@ -151,7 +151,7 @@ const CompanyTableCell: FC<CompanyTableCellProps> = ({companyData}) => {
                          style={{width: '200px'}}/>
                 }</td>
                 <div className='my-3' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <Button variant="outline-warning" onClick={handleEditClick} className='mb-2'>
+                    <Button variant="btn btn-danger" onClick={handleEditClick} className='mb-2'>
                         Редактировать
                     </Button>
 

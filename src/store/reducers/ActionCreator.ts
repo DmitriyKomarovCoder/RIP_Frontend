@@ -561,14 +561,14 @@ export const registerSession = (userName: string, login: string, password: strin
     }
 }
 
-export const logoutSession = () => async (dispatch: AppDispatch) => {
-    const accessToken = Cookies.get('jwtToken');
+export const logoutSession = (jwtToken: string) => async (dispatch: AppDispatch) => {
+    //const accessToken = Cookies.get('jwtToken');
 
     const config = {
         method: "post",
         url: "/api/user/logout",
         headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${jwtToken}`,
             'Content-Type': 'application/json'
         }
     };
@@ -577,7 +577,7 @@ export const logoutSession = () => async (dispatch: AppDispatch) => {
         dispatch(userSlice.actions.startProcess())
         const response = await axios(config);
         const errorText = response.data.login == '' ? 'Ошибка при попытке выйти' : ''
-        const successText = errorText || "Попробуйте ещё раз"
+            const successText = errorText || "До свидания!"
         dispatch(userSlice.actions.setStatuses([errorText, successText]))
 
         if (errorText == '') {

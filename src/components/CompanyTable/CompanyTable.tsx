@@ -28,7 +28,7 @@ const CompanyTable: FC<CompanyTableProps> = ({setPage}) => {
 
             <Nav className="ms-2">
                 <Nav.Item>
-                    <Link to="/add-company-2" className="btn btn-outline-primary mt-2"
+                    <Link to="/add-company-2" className="btn btn-outline-danger mt-2"
                           style={{marginLeft: '80px', marginBottom: '30px'}}>
                         Добавить компанию
                     </Link>
@@ -42,6 +42,7 @@ const CompanyTable: FC<CompanyTableProps> = ({setPage}) => {
                     <th>Статус</th>
                     <th>Описание</th>
                     <th>Изображение</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>

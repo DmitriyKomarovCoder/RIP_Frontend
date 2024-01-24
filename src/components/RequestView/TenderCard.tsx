@@ -11,7 +11,6 @@ import {
 import TableView from '../TableView/TableView.tsx';
 import {ITender} from '../../models/models.ts';
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
-import Cookies from "js-cookie";
 import {useNavigate, useParams} from "react-router-dom";
 import MyComponent from "../Popup/Popover.tsx";
 
@@ -26,7 +25,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
     const navigate = useNavigate();
     const {singleTender, success, error} = useAppSelector(state => state.tenderReducer)
     const [tenderName, setTenderName] = useState('$');
-    const role = Cookies.get('role')
+    // const role = Cookies.get('role')
 
     useEffect(() => {
         if (tender_id) {
@@ -74,13 +73,13 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                             </div>
                             <div className="detail-info">
                                 {singleTender.status !="черновик" && <label>Сформирована: {DateFormat(singleTender.formation_date)}</label>}
-                                <label htmlFor="tenderNameInput" style={{ color: 'white' }}>
+                                <label htmlFor="tenderNameInput" style={{ color: 'black' }}>
                                     <h4 style={{textAlign: 'left'}}>Название тендера:</h4>
                                 </label>
                                 <input
                                     type="text"
                                     id="tenderNameInput"
-                                    className="form-control bg-black text-white"
+                                    className="form-control bg-white text-black"
                                     value={tenderName === "$" ? singleTender.tender_name : tenderName}
                                     onChange={(e) => setTenderName(e.target.value)}
                                     style={{ marginBottom: '20px' }}
@@ -91,7 +90,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                             <div style={{textAlign: 'right'}}>
                                 {singleTender.status == 'черновик' && <button
                                     type="button"
-                                    className="btn btn-outline-light"
+                                    className="btn btn-outline-danger"
                                     onClick={() => handleSave(singleTender.id, singleTender)}
                                     style={{width: '150px', marginTop: '15px'}}
                                 >
@@ -112,7 +111,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                         {/* ======================= КНОПКИ ============================= */}
 
                         <div className='delete-make' style={{display: 'flex', gap: '10px'}}>
-                            {singleTender.status != 'удален' && singleTender.status == 'черновик' && role == '0' && (
+                            {singleTender.status != 'удален' && singleTender.status == 'черновик' && (
                                 <div style={{flex: 1}}>
                                     <button
                                         type="button"
@@ -128,7 +127,7 @@ const TenderCard: FC<TenderCardProps> = ({setPage}) => {
                                 <div style={{flex: 1}}>
                                     <button
                                         type="button"
-                                        className="btn btn-outline-light"
+                                        className="btn btn-danger"
                                         onClick={() => handleMakeRequest(singleTender.id)}
                                     >
                                         Сформировать

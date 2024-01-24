@@ -4,8 +4,8 @@ interface searchState {
     type: string
     user: string
     selectedStatus: string
-    startDate: Date | null
-    endDate: Date | null
+    startDate: string | null
+    endDate: string | null
 }
 
 const initialState: searchState = {
@@ -30,12 +30,13 @@ export const searchSlice = createSlice({
         setStatus: (state, action: PayloadAction<string>) => {
             state.selectedStatus = action.payload
         },
-        setDateStart: (state, action: PayloadAction<Date>) => {
-            state.startDate = action.payload
+        setDateStart: (state, action: PayloadAction<string>) => {
+            state.startDate = action.payload;
         },
-        setDateEnd: (state, action: PayloadAction<Date>) => {
-            state.endDate = action.payload
+        setDateEnd: (state, action: PayloadAction<string>) => {
+            state.endDate = action.payload;
         },
+
         reset: (state) => {
             state.type = ''
             state.endDate = null

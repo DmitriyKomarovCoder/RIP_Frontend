@@ -31,7 +31,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
             {isLoading && <h1> Загрузка данных .... </h1>}
             {error && <h1>Ошибка {error} </h1>}
             {<div className="company-card-body">
-                <div className="card-container">
+                <div className="card-container gray-text">
                     <img
                         className="round"
                         src={company?.image_url}
@@ -50,7 +50,7 @@ const CompanyDetail: FC<CompanyDetailProps> = ({setPage}) => {
                     {/*/>*/}
                     {/*}*/}
                     <div className="buttons">
-                        <button className="btn btn-primary" onClick={BackHandler}>Назад</button>
+                        <button className="btn btn-danger" onClick={BackHandler}>Назад</button>
                         {/*<button className="primary ghost">Записаться</button>*/}
                     </div>
                 </div>

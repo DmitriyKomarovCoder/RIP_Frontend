@@ -7,17 +7,22 @@
 
 .breadcrumb-item-2 {
     margin-right: 5px; /* Расстояние между элементами, если нужно */
+    color:#7B7D87;
 }
 
 .breadcrumb-item-2 a {
+    color: #DB0000;
     text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s ease;
 }
 
 .breadcrumb-item-2 a:hover {
-    color: #007bff; /* Новый цвет при наведении */
+    border-bottom: 1px solid #DB0000;
 }
 
 .breadcrumb-item-2:not(:last-child)::after {
-    content: '>'; /* Символ ">" после каждой ссылки, кроме последней */
-    margin-left: 5px; /* Расстояние между символом и следующей ссылкой */
+    content: '/';
+    color:#7B7D87;
+    margin-left: 5px;
 }

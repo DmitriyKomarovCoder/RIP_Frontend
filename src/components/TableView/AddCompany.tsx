@@ -63,10 +63,10 @@ const CreateCompanyPage: FC<AddCompanyProps> = ({setPage}) => {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col xs={12} md={6}>
-                        <h2>Добаление компании</h2>
-                        <Form onSubmit={handleSubmit}>
+                        <h2 style={{ color: 'black' }}>Добавление компании</h2>                        <Form
+                        onSubmit={handleSubmit}>
                             <Form.Group controlId="formCompanyName">
-                                <Form.Label>Название компании</Form.Label>
+                                <Form.Label style={{ color: 'black' }}>Название компании</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Название"
@@ -77,7 +77,7 @@ const CreateCompanyPage: FC<AddCompanyProps> = ({setPage}) => {
                                 />
                             </Form.Group>
                             <Form.Group controlId="formCompanyIIN">
-                                <Form.Label>ИИН</Form.Label>
+                                <Form.Label style={{ color: 'black' }}>ИИН</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Название"
@@ -85,10 +85,11 @@ const CreateCompanyPage: FC<AddCompanyProps> = ({setPage}) => {
                                     value={companyData.iin}
                                     onChange={handleInputChange}
                                     required
+
                                 />
                             </Form.Group>
                             <Form.Group controlId="formCityDescription">
-                                <Form.Label>Описание компании</Form.Label>
+                                <Form.Label style={{ color: 'black' }}>Описание компании</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
@@ -101,7 +102,7 @@ const CreateCompanyPage: FC<AddCompanyProps> = ({setPage}) => {
                             </Form.Group>
 
                             <Form.Group controlId="formCompanyImage">
-                                <Form.Label>Логотип компании</Form.Label>
+                                <Form.Label style={{ color: 'black' }}>Логотип компании</Form.Label>
                                 <Form.Control
                                     type="file"
                                     accept="image/*"

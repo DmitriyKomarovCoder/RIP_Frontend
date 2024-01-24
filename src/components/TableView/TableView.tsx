@@ -46,6 +46,7 @@ const TableView: FC<TableViewProps> = ({companyTender, status, setPage, tenderID
                     <th>Логотип компании</th>
                     <th>Название Компании</th>
                     <th>Описание</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,12 +55,12 @@ const TableView: FC<TableViewProps> = ({companyTender, status, setPage, tenderID
                         <td className="text-center">
                             {status == "черновик" && (
                                 <>
-                                    <button className="btn btn-sm btn-primary"
+                                    <button className="btn btn-sm btn-danger"
                                             onClick={() => handleCashChangeMinus(item.id, item.cash)}>
                                         -
                                     </button>
                                     <span className="mx-2">{item.cash} руб.</span>
-                                    <button className="btn btn-sm btn-primary"
+                                    <button className="btn btn-sm btn-danger"
                                             onClick={() => handleCashChangePlus(item.id, item.cash)}>
                                         +
                                     </button>

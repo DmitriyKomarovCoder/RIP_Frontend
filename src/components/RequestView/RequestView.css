@@ -18,7 +18,7 @@ body {
     display: flex;
     color: white;
     flex-direction: column; /* Updated to column layout */
-    background-color: #000d31;
+    background-color: #ffffff;
             /*#000000;*/
 }
 
@@ -40,6 +40,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    color: #000000;
 }
 
 .description-text-info {
@@ -63,6 +64,7 @@ body {
     /*margin-right: 20px;*/
     text-align: left;
     justify-content: flex-start;
+    color: #000000;
 }
 
 .delete-make {
@@ -113,10 +115,15 @@ body {
     margin-left: 80px;
     margin-right: 80px;
     border-collapse: collapse;
-    background-color: #000000;
-    color: #fff;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     margin-bottom: 20px;
+}
+
+th {
+    color:#ffffff;
+    background-color: #dc3545;
 }

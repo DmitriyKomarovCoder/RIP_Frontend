@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import DatePicker, {registerLocale, setDefaultLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
-import {fetchTendersFilter, moderatorUpdateStatus} from "../../store/reducers/ActionCreator.ts";
+import {fetchTenders, fetchTendersFilter, moderatorUpdateStatus} from "../../store/reducers/ActionCreator.ts";
 import MyComponent from "../Popup/Popover.tsx";
 import {Link} from "react-router-dom";
 import "./DatePickerStyle.css";
@@ -30,7 +30,7 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
     const dispatch = useAppDispatch();
     const {tender, error, success} = useAppSelector((state) => state.tenderReducer);
     const {isAuth} = useAppSelector((state) => state.userReducer);
-    const {startDate, endDate,selectedStatus} = useAppSelector((state) => state.searchReducer);
+    const {startDate, endDate, selectedStatus} = useAppSelector((state) => state.searchReducer);
     //const [startDate, setStartDate] = useState<Date | null>(null);
     //const [endDate, setEndDate] = useState<Date | null>(null);
     //const [selectedStatus, setSelectedStatus] = useState<string>('');
@@ -38,11 +38,12 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
     const [filteredTenders, setFilteredTenders] = useState<ITender[] | null>(null);
     const [filteredByUsers, setFilteredUsers] = useState<ITender[] | null>(null);
     const [textValue, setTextValue] = useState<string>('');
+    const jwtToken = Cookies.get('jwtToken')
 
     useEffect(() => {
         setPage();
         handleFilter()
-        const debouncedHandleFilter = debounce(handleFilter, 1000); // Настройте время задержки по своему усмотрению
+        const debouncedHandleFilter = debounce(handleFilter, 1000);
 
 
         const handleFilterInterval = setInterval(() => {
@@ -77,11 +78,16 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
             const day = date.getDate().toString().padStart(2, '0');
             return `${year}-${month}-${day}`;
         };
-        const formattedStartDate = formatDate(startDate);
-        const formattedEndDate = formatDate(endDate);
+        const startDateObject = startDate ? new Date(startDate) : null;
+        const endDateObject = endDate ? new Date(endDate) : null;
+
+        const formattedStartDate = formatDate(startDateObject);
+        const formattedEndDate = formatDate(endDateObject);
+
         if (role == '2') {
             dispatch(fetchTendersFilter(formattedStartDate, formattedEndDate, `${selectedStatus}`));
         } else {
+            dispatch(fetchTenders)
             localFilter(formattedStartDate, formattedEndDate)
         }
     };
@@ -112,14 +118,15 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
     }
 
     const clickCell = (cellID: number, event: React.MouseEvent<HTMLTableRowElement>) => {
-        const isInsideButtons = event && (event.target as HTMLElement).closest('.my-3');        if (!isInsideButtons) {
+        const isInsideButtons = event && (event.target as HTMLElement).closest('.my-3');
+        if (!isInsideButtons) {
             if (!isInsideButtons) {
                 navigate(`/tenders/${cellID}`);
             }
         }
     }
 
-    if (!isAuth) {
+    if (jwtToken === "") {
         return (
             <Link to="/login" className="btn btn-outline-danger">
                 Требуется войти в систему
@@ -148,151 +155,183 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
         <>
             {/* =================================== ALERTS ===========================================*/}
 
-            {error !== "" && <MyComponent isError={true} message={error} />}
-            {success !== "" && <MyComponent isError={false} message={success} />}
+            {error !== "" && <MyComponent isError={true} message={error}/>}
+            {success !== "" && <MyComponent isError={false} message={success}/>}
 
-            {/* =================================== FILTERS ======================================*/}
+            {/* =================================== CHECK JWT TOKEN =====================================*/}
+            {!isAuth ? (
+                <Link to="/login" className="btn btn-outline-danger">
+                    Требуется войти в систему
+                </Link>
+            ) : (
+                <>
+                    {/* =================================== FILTERS ======================================*/}
 
-            <Container>
-                <Row className="justify-content-center">
-                    <Col md={3} className="mb-3 custom-col">
-                        {role === '2' &&
-                            <Form.Group controlId="exampleForm.ControlInput1" className="custom-form">
-                                <Form.Label className="text-start">Фильтрация по пользователю</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Введите текст"
-                                    value={textValue}
-                                    onChange={(e) => setTextValue(e.target.value)}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleInputChange();
-                                        }
-                                    }}
-                                />
-                            </Form.Group>
-                        }
-                        <div className="filter-section d-flex flex-column">
-                            <label>Дата создания с:</label>
-                            <DatePicker
-                                selected={startDate}
-                                onChange={(date) => {
-                                    if (date) {
-                                        dispatch(searchSlice.actions.setDateStart(date));
-                                    }
-                                }}
-                                className="custom-datepicker"
-                                popperPlacement="bottom-start"
-                            />
-
-                            <label>Дата окончания по:</label>
-                            <DatePicker
-                                selected={endDate}
-                                onChange={(date) => {
-                                    if (date) {
-                                        dispatch(searchSlice.actions.setDateEnd(date));
-                                    }
-                                }}
-                                className="custom-datepicker"
-                                popperPlacement="bottom-start"
-                            />
-
-                            {role === '2' &&
-                                <>
-                                    <label className="mb-2">Статус тендера:</label>
-                                    <Form.Select
-                                        className='mb-2'
-                                        value={selectedStatus || ""}
-                                        onChange={(e) => dispatch(searchSlice.actions.setStatus(e.target.value))}
-                                    >
-                                        <option value="">Выберите статус</option>
-                                        <option value="сформирован">Сформирован</option>
-                                        <option value="завершен">Завершён</option>
-                                        <option value="отклонен">Отклонён</option>
-                                    </Form.Select>
-                                </>
-                            }
-
-                            <Button style={{ width: '100%' }} className='mt-2' onClick={handleFilter}>Применить фильтры</Button>
-                            <Button variant="outline-danger" style={{ width: '100%' }} className='mt-2' onClick={resetFilter}>Сбросить фильтры</Button>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
-
-
-
-            {/* =================================== TABLE ADMIN =============================================*/}
-            {tender &&
-                <table className='table-tenders'>
-                    <thead>
-                    <tr>
-                        {/*<th>ID</th>*/}
-                        <th>Название тендера</th>
-                        <th>Статус рассмотрения</th>
-                        <th>Дата создания</th>
-                        <th>Дата начала процесса</th>
-                        <th>Дата принятия</th>
-                        <th>Автор</th>
-                        {role == '2' &&
-                            <th>Модератор</th>
-                        }
-                        <th>Статус</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredTenders && role == '0'
-                        ? filteredTenders.map((tender) => (
-                            <tr key={tender.id} onClick={(event) => clickCell(tender.id, event)}>                                {/*<td>{tender.id}</td>*/}
-                                <td>{tender.tender_name || 'Не задано'}</td>
-                                <td>{tender.status_check || 'Не рассмотрен'}</td>
-                                <td>{checkData(tender.creation_date)}</td>
-                                <td>{checkData(tender.formation_date)}</td>
-                                <td>{checkData(tender.completion_date)}</td>
-                                <td>{tender.user_login || 'Не задан'}</td>
-                                <td>{tender.status}</td>
-                            </tr>
-                        ))
-                        : (filteredByUsers ? filteredByUsers : tender.tenders).map((tender) => (
-                            <tr key={tender.id} onClick={(event) => clickCell(tender.id, event)}>
-                                {/*<td>{tender.id}</td>*/}
-                                <td>{tender.tender_name || 'Не задано'}</td>
-                                <td>{tender.status_check || 'Не рассмотрен'}</td>
-                                <td>{checkData(tender.creation_date)}</td>
-                                <td>{checkData(tender.formation_date)}</td>
-                                <td>{checkData(tender.completion_date)}</td>
-                                <td>{tender.user_login || 'Не задан'}</td>
-                                {role == '2' &&
-                                    <td>{tender.moderator_login || 'Не задан'}</td>
+                    <Container>
+                        <Row className="justify-content-center">
+                            <Col md={3} className="mb-3 custom-col">
+                                {role === '2' &&
+                                    <Form.Group controlId="exampleForm.ControlInput1" className="custom-form">
+                                        <Form.Label
+                                            style={{ color: '#7B7D87', fontWeight: 'bold' }}
+                                        >
+                                            Фильтрация по пользователю
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Введите текст"
+                                            value={textValue}
+                                            onChange={(e) => setTextValue(e.target.value)}
+                                            onKeyPress={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleInputChange();
+                                                }
+                                            }}
+                                        />
+                                    </Form.Group>
                                 }
-                                <td>{tender.status}</td>
-                                <td>
-                                    {tender.status == 'сформирован' && role == '2' && (
+                                <div className="filter-section d-flex flex-column">
+                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}>Дата создания с:</label>
+                                    <DatePicker
+                                        selected={startDate ? new Date(startDate) : null}
+                                        onChange={(date) => {
+                                            if (date) {
+                                                dispatch(searchSlice.actions.setDateStart(date.toISOString()));
+                                            }
+                                        }}
+                                        className="custom-datepicker"
+                                        popperPlacement="bottom-start"
+                                    />
 
-                                        <div className='my-3'
-                                             style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                            <Button variant="outline-warning" onClick={() => handlerApprove(tender.id)}
-                                                    className='mb-2'>
-                                                Завершить
-                                            </Button>
+                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}>Дата окончания по:</label>
+                                    <DatePicker
+                                        selected={endDate ? new Date(endDate) : null}
+                                        onChange={(date) => {
+                                            if (date) {
+                                                dispatch(searchSlice.actions.setDateEnd(date.toISOString()));
+                                            }
+                                        }}
+                                        className="custom-datepicker"
+                                        popperPlacement="bottom-start"
+                                    />
 
-                                            <Button variant="outline-danger" onClick={() => handleDiscard(tender.id)}
-                                                    style={{width: '100%'}}>
-                                                Отказать
-                                            </Button>
-                                        </div>
+                                    {role === '2' &&
+                                        <>
+                                            <label className="mb-2" style={{color: '#7B7D87', fontWeight: 'bold'}}>Статус
+                                                тендера:</label>
+                                            <Form.Select
+                                                className='mb-2'
+                                                value={selectedStatus || ""}
+                                                onChange={(e) => dispatch(searchSlice.actions.setStatus(e.target.value))}
+                                            >
+                                                <option value="">Выберите статус</option>
+                                                <option value="сформирован">Сформирован</option>
+                                                <option value="завершен">Завершён</option>
+                                                <option value="отклонен">Отклонён</option>
+                                            </Form.Select>
+                                        </>
+                                    }
 
-                                    )}
-                                </td>
+                                    <Button
+                                        className='btn btn-danger mt-2'
+                                        style={{ width: '100%' }}
+                                        onClick={handleFilter}
+                                    >
+                                        Применить фильтры
+                                    </Button>
+
+                                    <Button
+                                        className='btn btn-danger mt-2'
+                                        style={{ width: '100%' }}
+                                        onClick={resetFilter}
+                                    >
+                                        Сбросить фильтры
+                                    </Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+
+
+                    {/* =================================== TABLE ADMIN =============================================*/}
+                    {tender &&
+                        <table className='table-tenders'>
+                            <thead>
+                            <tr>
+                                {/*<th>ID</th>*/}
+                                <th>Название тендера</th>
+                                <th>Статус рассмотрения</th>
+                                <th>Дата создания</th>
+                                <th>Дата начала процесса</th>
+                                <th>Дата принятия</th>
+                                <th>Автор</th>
+                                {role == '2' &&
+                                    <th>Модератор</th>
+                                }
+                                <th>Статус</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            }
+                            </thead>
+                            <tbody>
+                            {filteredTenders && role == '0'
+                                ? filteredTenders.map((tender) => (
+                                    <tr key={tender.id}
+                                        onClick={(event) => clickCell(tender.id, event)}>                                {/*<td>{tender.id}</td>*/}
+                                        <td>{tender.tender_name || 'Не задано'}</td>
+                                        <td>{tender.status_check || 'Не рассмотрен'}</td>
+                                        <td>{checkData(tender.creation_date)}</td>
+                                        <td>{checkData(tender.formation_date)}</td>
+                                        <td>{checkData(tender.completion_date)}</td>
+                                        <td>{tender.user_login || 'Не задан'}</td>
+                                        <td>{tender.status}</td>
+                                    </tr>
+                                ))
+                                : (filteredByUsers ? filteredByUsers : tender.tenders).map((tender) => (
+                                    <tr key={tender.id} onClick={(event) => clickCell(tender.id, event)}>
+                                        {/*<td>{tender.id}</td>*/}
+                                        <td>{tender.tender_name || 'Не задано'}</td>
+                                        <td>{tender.status_check || 'Не рассмотрен'}</td>
+                                        <td>{checkData(tender.creation_date)}</td>
+                                        <td>{checkData(tender.formation_date)}</td>
+                                        <td>{checkData(tender.completion_date)}</td>
+                                        <td>{tender.user_login || 'Не задан'}</td>
+                                        {role == '2' &&
+                                            <td>{tender.moderator_login || 'Не задан'}</td>
+                                        }
+                                        <td>{tender.status}</td>
+                                        <td>
+                                            {tender.status == 'сформирован' && role == '2' && (
+
+                                                <div className='my-3'
+                                                     style={{
+                                                         display: 'flex',
+                                                         flexDirection: 'column',
+                                                         alignItems: 'center'
+                                                     }}>
+                                                    <Button variant="btn btn-danger"
+                                                            onClick={() => handlerApprove(tender.id)}
+                                                            className='mb-2'>
+                                                        Завершить
+                                                    </Button>
+
+                                                    <Button variant="outline-danger"
+                                                            onClick={() => handleDiscard(tender.id)}
+                                                            style={{width: '100%'}}>
+                                                        Отказать
+                                                    </Button>
+                                                </div>
+
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    }
+                </>
+            )}
         </>
     );
-};
-
+}
 export default RequestView;
 
 function checkData(data: string): string {

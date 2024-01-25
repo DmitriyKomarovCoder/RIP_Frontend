@@ -47,9 +47,9 @@ const RegisterPage: FC<RegisterPageProps> = () => {
             <Container>
                 <Row className="justify-content-center">
                     <Col md={5}>
-                        <div className="bg-dark p-4 rounded">
-                            <h2 className="text-center mb-4">Регистрация</h2>
-                            <Form.Label className="font-weight-bold text-left">Имя пользователя</Form.Label>
+                        <div className="bg-white p-4 rounded">
+                            <h2 className="text-center mb-4" style={{ color: 'black' }}>Регистрация</h2>
+                            <Form.Label className="font-weight-bold text-left" style={{ color: 'black' }}>Имя пользователя</Form.Label>
                             <Form.Control
                                 onChange={(e) => setUsername(e.target.value)}
                                 type="text"
@@ -57,7 +57,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                                 required
                             />
 
-                            <Form.Label className="mt-3">Логин</Form.Label>
+                            <Form.Label className="mt-3" style={{ color: 'black' }}>Логин</Form.Label>
                             <Form.Control
                                 onChange={(e) => setLogin(e.target.value)}
                                 type="text"
@@ -65,7 +65,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                                 required
                             />
 
-                            <Form.Label className="mt-3">Пароль</Form.Label>
+                            <Form.Label className="mt-3" style={{ color: 'black' }}>Пароль</Form.Label>
                             <Form.Control
                                 onChange={(e) => setPassword(e.target.value)}
                                 type="password"
@@ -73,7 +73,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                                 required
                             />
 
-                            <Form.Label className="mt-3">Подтвердите пароль</Form.Label>
+                            <Form.Label className="mt-3" style={{ color: 'black' }}>Подтвердите пароль</Form.Label>
                             <Form.Control
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 type="password"
@@ -82,7 +82,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
                             />
 
                             <Button
-                                variant="primary"
+                                variant="danger"
                                 type="submit"
                                 className="w-100 mt-4"
                                 onClick={handleRegister}

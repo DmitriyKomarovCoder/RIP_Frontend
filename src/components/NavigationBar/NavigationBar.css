@@ -28,7 +28,7 @@
     display: block;
     opacity: 0;
     position: absolute;
-    bottom: -18%;
+    bottom: -4px;
     height: 2px;
     width: 100%;
     background-color: #DB0000;
@@ -67,7 +67,8 @@
     display: block;
     opacity: 1;
     position: absolute;
-    bottom: -18%;
+    bottom: -4px;
+    /*bottom: -17%;*/
     height: 2px;
     width: 100%;
     background-color: #DB0000;
@@ -111,7 +112,7 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background-color: #7B7D87;
     transition: transform 0.3s ease;
     transform: scaleX(0);

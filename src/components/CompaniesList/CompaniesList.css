@@ -9,9 +9,9 @@
 body {
     background-color: #ffffff;
     background-image: url("bg1.png");
-    background-size: cover; /* чтобы картинка занимала весь экран */
-    background-position: center; /* устанавливаем картинку по центру */
-    background-repeat: no-repeat; /* чтобы избежать повторения картинки */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0px;
     font-family: Arial, sans-serif;

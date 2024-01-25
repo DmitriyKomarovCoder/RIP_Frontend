@@ -35,9 +35,9 @@ const LoginPage: FC<LoginPageProps> = () => {
                 </label>
                 <Row className="justify-content-center">
                     <Col md={5}>
-                        <div className="bg-dark p-4 rounded">
-                            <h2 className="text-center mb-4">Авторизация</h2>
-                            <Form.Label className="font-weight-bold text-left">Логин</Form.Label>
+                        <div className="bg-light p-4 rounded">
+                            <h2 className="text-center mb-4" style={{ color: 'black' }}>Авторизация</h2>
+                            <Form.Label className="font-weight-bold text-left" style={{ color: 'black' }}>Логин</Form.Label>
                             <Form.Control
                                 onChange={(e) => setLogin(e.target.value)}
                                 type="login"
@@ -45,7 +45,7 @@ const LoginPage: FC<LoginPageProps> = () => {
                                 required
                             />
 
-                            <Form.Label className="mt-3">Пароль</Form.Label>
+                            <Form.Label className="mt-3" style={{ color: 'black' }}>Пароль</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Введите пароль"
@@ -53,7 +53,7 @@ const LoginPage: FC<LoginPageProps> = () => {
                                 required
                             />
 
-                            <Button variant="primary" type="submit" className="w-100 mt-4" onClick={handleSubmit}
+                            <Button variant="danger" type="submit" className="w-100 mt-4" onClick={handleSubmit}
                                     style={{borderRadius: '10px'}}>
                                 Войти
                             </Button>

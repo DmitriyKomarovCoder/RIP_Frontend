@@ -18,7 +18,7 @@ const BreadCrumbs: FC<BreadCrumbsProps> = ({pages}) => {
             <div className="breadcrumbs-container">
                 {pages.map((page, index) => (
                     <React.Fragment key={index}>
-                        {index > 0 && <span className="separator">{' -> '}</span>}
+                        {index > 0 && <span className="separator">{' / '}</span>}
                         <Link to={`/${page.to}`} className="nav-link ps-0">
                             <span className="breadcrumb">{page.name}</span>
                         </Link>

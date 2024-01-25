@@ -4,18 +4,30 @@ import {ICompany, mockCompanies} from "../../models/models.ts";
 import List from "../List.tsx";
 import CompanyItem from "../CompanyItem/CompanyItem.tsx";
 import './CompaniesList.css'
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+import {faSearch} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface CompanyListProps {
     setPage: () => void
     searchValue?: string
+    handleSearchValue: (value: string) => void
     resetSearchValue: () => void;
 }
 
-const CompaniesList: FC<CompanyListProps> = ({setPage, searchValue, resetSearchValue}) => {
+const CompaniesList: FC<CompanyListProps> = ({setPage, searchValue, resetSearchValue, handleSearchValue}) => {
     const [Companies, setCompanies] = useState<ICompany[]>([]);
     const [serverIsWork, setServerStatus] = useState<boolean>(false);
     const [reloadPage, setReloadPage] = useState<boolean>(false);
     const navigate = useNavigate();
+
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const inputValue = (document.getElementById('search-text-field') as HTMLInputElement)?.value;        console.log(inputValue)
+        handleSearchValue(inputValue);
+    };
 
     useEffect(() => {
         setPage()
@@ -78,18 +90,44 @@ const CompaniesList: FC<CompanyListProps> = ({setPage, searchValue, resetSearchV
     }
 
     return (
-        <List items={Companies} renderItem={(company: ICompany) =>
-            <CompanyItem
-                key={company.company_id}
-                company={company}
-                isServer={serverIsWork}
-                onClick={(num) => navigate(`/companies/${num}`)}
-                reloadPage={() => {
-                    setReloadPage(true)
-                }}
+
+        <div className='mx-auto d-flex flex-column w-100'>
+            {/* Поиск */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
+                <Form onSubmit={handleSearch} className="d-flex">
+                    <div className="d-flex align-items-center"> {/* Обертка для создания отступа слева */}
+                        <FontAwesomeIcon
+                            icon={faSearch}
+                            className="me-2"
+                            style={{ fontSize: '1.5em', color: '#777777' }}
+                        />
+                        <FormControl
+                            id={'search-text-field'}
+                            type="text"
+                            placeholder="Поиск компаний"
+                            aria-label="Search"
+                        />
+                        <Button type="submit" className="ms-2 btn btn-danger">
+                            Поиск
+                        </Button>
+                    </div>
+                </Form>
+            </div>
+
+            <List items={Companies} renderItem={(company: ICompany) => (
+                <CompanyItem
+                    key={company.company_id}
+                    company={company}
+                    isServer={serverIsWork}
+                    onClick={(num) => navigate(`/companies/${num}`)}
+                    reloadPage={() => {
+                        setReloadPage(true)
+                    }}
+                />
+                )}
             />
-        }
-        />
+        </div>
+
     );
 };
 

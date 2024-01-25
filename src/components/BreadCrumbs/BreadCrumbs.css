@@ -3,16 +3,18 @@
     align-items: baseline;
     font-size: 16px;
     padding: 0 9%;
+    color: #7B7D87;
+
 }
 
 .separator {
     display: flex;
     align-items: center;
     margin: 0 8px;
-    color: #3b3b3b;
+    color: #7B7D87;
 }
 
 .breadcrumb:hover {
-    color: #007bff;
+    color: #DB0000;
     cursor: pointer;
 }

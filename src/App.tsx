@@ -19,7 +19,7 @@ function App() {
 
     return (
         <>
-            <NavigationBar handleSearchValue={(value) => setSearchValue(value)}/>
+            <NavigationBar/>
             <BreadCrumbs pages={pages}/>
             <>
                 <Routes>
@@ -30,6 +30,7 @@ function App() {
                                    setPage={() => addPage([CompaniesPage])}
                                    searchValue={searchValue}
                                    resetSearchValue={resetSearchValue}
+                                   handleSearchValue={(value) => setSearchValue(value)}
                                />
                            }
                     />

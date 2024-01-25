@@ -6,13 +6,13 @@
     padding: 20px 8%;
 }
 
-body {
-    background-color: #ffffff;
-    background-image: url("https://dmitriykomarovcoder.github.io/RIP_Frontend/bg1.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: 0;
-    padding: 0px;
-    font-family: Arial, sans-serif;
-}
+/*body {*/
+/*    background-color: #ffffff;*/
+/*    background-image: url("/RIP_Frontend/bg1.png");*/
+/*    background-size: cover;*/
+/*    background-position: center;*/
+/*    background-repeat: no-repeat;*/
+/*    margin: 0;*/
+/*    padding: 0px;*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/

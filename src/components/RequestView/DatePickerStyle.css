@@ -6,6 +6,7 @@
     font-size: 14px;
     color: #333;
     width: 100%;
+    margin-bottom: 10px; /* Adjust margin for spacing */
 }
 
 .react-datepicker-wrapper {
@@ -17,22 +18,23 @@
 
 .filter-section {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Distribute space evenly between elements */
     align-items: center;
     gap: 15px;
-    margin-bottom: 20px; /* Add margin to separate from other content */
+    margin-bottom: 20px;
 }
 
 .filter-section label {
     margin-right: 10px;
 }
 
-.filter-section select {
+.filter-section select, .filter-section input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     color: #333;
+    width: 100%; /* Ensure inputs and selects take full width */
 }
 
 .filter-section button {
@@ -46,4 +48,8 @@
 
 .filter-section button:hover {
     background-color: #b02a37;
+}
+
+.filter-section select, .filter-section input {
+    width: 100px;
 }

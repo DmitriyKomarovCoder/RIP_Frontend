@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {ICompany} from '../../models/models.ts';
 import './CardItem.css'
-import {addCompanyIntoTender} from "../../store/reducers/ActionCreator.ts";
+import {addCompanyIntoTender, fetchCompanies} from "../../store/reducers/ActionCreator.ts";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux.ts";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,10 +21,14 @@ const CompanyItem: FC<CompanyItemProps> = ({company, onClick, isServer, setDraft
     //const {increase} = companySlice.actions
     //const {cash} = useAppSelector(state => state.companyReducer)
     const {isAuth} = useAppSelector(state => state.userReducer)
+    const fetchCompaniesAndSetDraft = async () => {
+        const draftId = await dispatch(fetchCompanies());
+        setDraftID(draftId);
+    };
     const plusClickHandler = async () => {
         //dispatch(increase())
-        const id = await dispatch(addCompanyIntoTender(company.company_id, 0.0, company.name ?? "Без названия"))
-        setDraftID(id);
+       dispatch(addCompanyIntoTender(company.company_id, 0.0, company.name ?? "Без названия"))
+        await fetchCompaniesAndSetDraft();
     }
 
     return (

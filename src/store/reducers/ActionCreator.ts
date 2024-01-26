@@ -136,7 +136,7 @@ export const deleteCompany = (companyId: number) => async (dispatch: AppDispatch
 }
 
 
-export const addCompanyIntoTender = (companyId: number, cash: number, companyName: string) => async (dispatch: AppDispatch): Promise<number | null> => {
+export const addCompanyIntoTender = (companyId: number, cash: number, companyName: string) => async (dispatch: AppDispatch) => {
     const accessToken = Cookies.get('jwtToken');
     const config = {
         method: "post",
@@ -157,8 +157,6 @@ export const addCompanyIntoTender = (companyId: number, cash: number, companyNam
 
         dispatch(companySlice.actions.companyAddedIntoTender([errorText, successText]));
 
-        // Возвращаем только id из ответа
-        return response.data.id;
     } catch (e) {
         dispatch(companySlice.actions.companiesFetchedError(`${e}`));
         return null; // Возвращаем null в случае ошибки

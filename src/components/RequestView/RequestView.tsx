@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 import "./DatePickerStyle.css";
 import "./RequestView.css";
 import {Form, Button, Container, Row, Col} from "react-bootstrap";
-import {format} from "date-fns";
 import {useNavigate} from 'react-router-dom';
 import Cookies from "js-cookie";
 import {ITender} from "../../models/models.ts";
@@ -80,7 +79,6 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
         };
         const startDateObject = startDate ? new Date(startDate) : null;
         const endDateObject = endDate ? new Date(endDate) : null;
-
         const formattedStartDate = formatDate(startDateObject);
         const formattedEndDate = formatDate(endDateObject);
 
@@ -168,18 +166,16 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                     {/* =================================== FILTERS ======================================*/}
 
                     <Container>
+                        <h2 style={{textAlign: 'center', color: 'black'}}>Фильтр</h2>
                         <Row className="justify-content-center">
                             <Col md={3} className="mb-3 custom-col">
-                                {role === '2' &&
-                                    <Form.Group controlId="exampleForm.ControlInput1" className="custom-form">
-                                        <Form.Label
-                                            style={{ color: '#7B7D87', fontWeight: 'bold' }}
-                                        >
-                                            Фильтрация по пользователю
-                                        </Form.Label>
+
+                                <div className="filter-section d-flex justify-content-center mb-3 pe-4">
+                                    {role === '2' &&
                                         <Form.Control
+                                            className='mb-2'
                                             type="text"
-                                            placeholder="Введите текст"
+                                            placeholder="Логин"
                                             value={textValue}
                                             onChange={(e) => setTextValue(e.target.value)}
                                             onKeyPress={(e) => {
@@ -187,11 +183,11 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                                     handleInputChange();
                                                 }
                                             }}
+
                                         />
-                                    </Form.Group>
-                                }
-                                <div className="filter-section d-flex flex-column">
-                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}>Дата создания с:</label>
+                                    }
+
+                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}></label>
                                     <DatePicker
                                         selected={startDate ? new Date(startDate) : null}
                                         onChange={(date) => {
@@ -200,10 +196,11 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                             }
                                         }}
                                         className="custom-datepicker"
+                                        placeholderText="Дата начала"
                                         popperPlacement="bottom-start"
                                     />
 
-                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}>Дата окончания по:</label>
+                                    <label style={{color: '#7B7D87', fontWeight: 'bold'}}></label>
                                     <DatePicker
                                         selected={endDate ? new Date(endDate) : null}
                                         onChange={(date) => {
@@ -213,18 +210,19 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                         }}
                                         className="custom-datepicker"
                                         popperPlacement="bottom-start"
+                                        placeholderText="Дата конца"
                                     />
 
                                     {role === '2' &&
                                         <>
-                                            <label className="mb-2" style={{color: '#7B7D87', fontWeight: 'bold'}}>Статус
-                                                тендера:</label>
+                                            <label className="mb-2"
+                                                   style={{color: '#7B7D87', fontWeight: 'bold'}}></label>
                                             <Form.Select
                                                 className='mb-2'
                                                 value={selectedStatus || ""}
                                                 onChange={(e) => dispatch(searchSlice.actions.setStatus(e.target.value))}
                                             >
-                                                <option value="">Выберите статус</option>
+                                                <option value="">Статус</option>
                                                 <option value="сформирован">Сформирован</option>
                                                 <option value="завершен">Завершён</option>
                                                 <option value="отклонен">Отклонён</option>
@@ -233,19 +231,19 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
                                     }
 
                                     <Button
-                                        className='btn btn-danger mt-2'
-                                        style={{ width: '100%' }}
+                                        className='btn btn-danger mb-2'
+                                        style={{width: '100%', height: '40px' }}
                                         onClick={handleFilter}
                                     >
-                                        Применить фильтры
+                                        Применить
                                     </Button>
 
                                     <Button
-                                        className='btn btn-danger mt-2'
-                                        style={{ width: '100%' }}
+                                        className='btn btn-danger mb-2'
+                                        style={{width: '100%', height: '40px' }}
                                         onClick={resetFilter}
                                     >
-                                        Сбросить фильтры
+                                        Сбросить
                                     </Button>
                                 </div>
                             </Col>
@@ -335,14 +333,24 @@ const RequestView: FC<RequestViewProps> = ({setPage}) => {
 export default RequestView;
 
 function checkData(data: string): string {
-    if (data == '0001-01-01T00:00:00Z') {
-        return 'Дата не задана'
+    if (data === '0001-01-01T00:00:00Z') {
+        return 'Дата не задана';
     }
-    const formattedDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return format(date, 'dd.MM.yyyy');
-    };
+    // 0001-01-01T00:00:00Z
+    const formattedDate = (dateString: string): string => {
+        const timestamp = Date.parse(dateString);
+        if (isNaN(timestamp)) {
+            return 'Invalid Date';
+        }
 
+        const date = new Date(timestamp);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getUTCHours().toString().padStart(2, '0');
+        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+        return `${day}-${month}-${year} ${hours}:${minutes}`;
+    };
     const formatted = formattedDate(data);
-    return formatted
+    return formatted;
 }
